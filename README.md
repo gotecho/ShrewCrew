@@ -1,3 +1,7 @@
 # ShrewCrew
 ShrewTechs
-Ava Brady
+<<<<<<< HEAD
+
+=======
+Team Member: Ronald Pierre Lingat
+Team Member: Ava Brady
