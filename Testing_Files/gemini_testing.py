@@ -2,7 +2,7 @@
 import google.generativeai as genai #Make sure you have generative ai downloaded.
 # Do pip3 install --upgrade google.generativeai
 
-genai.configure(api_key="AIzaSyBUKLB2f4yuLoNxx4WUmYs1tGZWj-NUqdY") # Configures api key.
+genai.configure(api_key="API_KEY") # Configures api key.
 
 model = genai.GenerativeModel('gemini-1.5-flash-latest') # Uses the gemini model we are working with.
 
