@@ -4,12 +4,15 @@ import os
 print(sys.path)
 sys.path.append('/usr/local/lib/python3.11/site-packages')
 import requests
+import google.generativeai as genai
+
+genai.configure(api_key="secret_google_key") 
 
 auth_url = "https://test.salesforce.com/services/oauth2/token"
 client_id = "3MVG9RHx1QGZ7OsglF7bGHgSAlMfHROUlnMxburNqgasDSWaXsgx4bRDY0alceJEWveBR2LtxfqlFsRUb5deH"
-client_secret = "SUPER SECRET KEY TO BE REPLACED EACH TIME"
+client_secret = "secret_key"
 username = "apiuser@cityofsacramento.org.qa"
-password = "SUPER SECRET PASSWORD TO BE REPLACED EACH TIME"
+password = "secret_password"
 grant_type = "password"
 
 # Prepare the payload for the OAuth request
@@ -47,6 +50,14 @@ case_url = f"{instance_url}/services/data/v52.0/sobjects/Case/{case_id}"
 
 # Make the GET request to fetch the case details
 response = requests.get(case_url, headers=headers)
+
+model = genai.GenerativeModel('gemini-1.5-flash-latest') # Uses the gemini model we are working with.
+
+response1 = model.generate_content(f"""Please relay the information from this json input {response.text} in
+                                   a conversational manor.""")
+
+print(response1.text)
+print()
 
 # Check if the request was successful
 if response.status_code == 200:
