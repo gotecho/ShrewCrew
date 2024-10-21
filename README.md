@@ -8,3 +8,4 @@ Team Member: Drew Izzo
 Team Member: Mia Brady
 Team Member: Spencer Headspeth
 Team Member: Anthony Vitro
+Team Member: Rajesh Suresh
