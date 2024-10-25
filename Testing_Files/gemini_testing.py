@@ -1,6 +1,7 @@
 # python 3.9+ required
 import google.generativeai as genai #Make sure you have generative ai downloaded.
 # Do pip3 install --upgrade google.generativeaih
+import requests # do pip install requests
 
 genai.configure(api_key="API_KEY") # Configures api key.
 
