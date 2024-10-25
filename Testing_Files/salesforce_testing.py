@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 import sys
 import os
+from dotenv import load_dotenv
+
+load_dotenv() 
 print(sys.path)
 sys.path.append('/usr/local/lib/python3.11/site-packages')
 import requests
 import google.generativeai as genai
 
-genai.configure(api_key="secret_google_key") 
+genai.configure(api_key=os.getenv("GOOGLE_API")) 
 
-auth_url = "https://test.salesforce.com/services/oauth2/token"
-client_id = "3MVG9RHx1QGZ7OsglF7bGHgSAlMfHROUlnMxburNqgasDSWaXsgx4bRDY0alceJEWveBR2LtxfqlFsRUb5deH"
-client_secret = "secret_key"
-username = "apiuser@cityofsacramento.org.qa"
-password = "secret_password"
+auth_url = os.getenv("SALESFORCE_AUTH_URL")
+client_id = os.getenv("SALESFORCE_CLIENT_ID")
+client_secret = os.getenv("SALESFORCE_SECRET_KEY")
+username = os.getenv("SALESFORCE_USERNAME")
+password = os.getenv("SALESFORCE_PASSWORD")
 grant_type = "password"
 
 # Prepare the payload for the OAuth request
