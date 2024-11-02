@@ -1,15 +1,14 @@
-from flask import Flask, request, redirect
-from twilio.twiml.messaging_response import MessagingResponse
-from flask_ngrok import run_with_ngrok
+import os
+from datetime import datetime
+from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
+import logging
 
-app = Flask(__name__)
-run_with_ngrok(app)
+TWILIO_ACCOUNT_SID = os.environ["TWILIO_ACCOUNT_ID"]
+TWILIO_AUTH_TOKEN = os.envrion["TWILIO_AUTH_TOKEN"]
+logger = logging.getLogger(__name__)
+twilio_api = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
-@app.route("/sms", methods = ['GET', 'POST'])
-def sms_reply():
-    resp = MessagingResponse()
-    resp.messages("received, responded")
-    return str(resp)
-
-if __name__ == "__main__":
-    app.run()
+def fetch_sms():
+    return twilio_api.messages.stream()
+    
