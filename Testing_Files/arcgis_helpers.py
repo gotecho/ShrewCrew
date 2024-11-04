@@ -2,8 +2,33 @@ from datetime import datetime
 import requests
 import os
 from dotenv import load_dotenv
+import google.generativeai as genai
+
 
 load_dotenv()
+
+genai.configure(api_key=os.getenv('GOOGLE_API'))  # Store your API key in .env
+
+def generate_gemini_response(prompt: str) -> str:
+    """
+    Function to generate a response from Google Gemini using GenerativeModel.
+    prompt <string>: the prompt to send to Gemini
+    returns:
+        <string>: the response text from Gemini
+    """
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash") 
+        
+        response = model.generate_content(prompt)
+
+        if response.candidates and len(response.candidates) > 0:
+            return response.candidates[0].content.parts[0].text
+
+        return "No candidates found."
+
+    except Exception as e:
+        print(f"Error generating response: {e}")
+        return "Error generating response."
 
 def geocode(address: str, threshold=80) -> dict[str, dict]:
     """
@@ -59,12 +84,29 @@ def geocode(address: str, threshold=80) -> dict[str, dict]:
     world_data = world_response.json()
     best_candidate, is_sacramento = _find_best_candidate(world_data, threshold=threshold)
 
+        
+    if best_candidate:
+        gemini_prompt = f"{best_candidate['address']}. Is this a valid location in Sacramento? "
+    else:
+        gemini_prompt = f"The address {address} could not be matched. What could be a valid nearby location? "
+
+    
+    gemini_response = generate_gemini_response(gemini_prompt)
+
     # Return dict indicating if Sacramento candidate is found or the closest address otherwise
-    return {"is_sacramento": is_sacramento, "address_data": best_candidate['address']}
+    return {"is_sacramento": is_sacramento, "address_data": best_candidate['address'],"gemini_response": gemini_response}
 
 
 if __name__ == "__main__":
-    
-    print(geocode('1029 Betsy Ross Dr'))
-    print(geocode("J street"))
-    print(geocode('foothills blvd'))
+    addresses = ['1029 Betsy Ross Dr', "J street", 'foothills blvd']
+    for address in addresses:
+        result = geocode(address)
+        print(f"Address: {address}")
+        if result['address_data'] is None:
+            print("No valid address found.")
+        else:
+            print(f"Is Sacramento: {result['is_sacramento']}")
+            print(f"Matched Address: {result['address_data']}")
+        
+        print(f"Gemini Response: {result['gemini_response']}")
+        print("")
