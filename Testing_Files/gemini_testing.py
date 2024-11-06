@@ -2,12 +2,12 @@
 import google.generativeai as genai #Make sure you have generative ai downloaded.
 # Do pip3 install --upgrade google.generativeai
 import requests # do pip install requests
-from google.generativeai import generate_text
+import arcgis_helpers
 genai.configure(api_key="API_KEY") # Configures api key.
 
 def generate_gemini_response(prompt):
 
-    response = generate_text(
+    response = generate_gemini_response(
         model = 'gemini-1.5-flash-latest',
         prompt = prompt,
         temperature = 0.7,
