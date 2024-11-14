@@ -2,13 +2,15 @@
 #ENSURE YOU HAVE TWILIO INSTALLED IN YOUR MACHINE! THIS PROGRAM WON'T WORK OTHERWISE!
 #Not sure how to get around this.
 import os
+from dotenv import load_dotenv
 from twilio.rest import Client
 
 # Find your Account SID and Auth Token at twilio.com/console
 # and set the environment variables. See http://twil.io/secure
+load_dotenv()
 
-value_of_sid='sacCitySID' #Use SID of Sacramento City account provided in email
-value_of_auth='sacCityAuthToken' #Auth Token of Sacramento City Account
+value_of_sid=os.getenv("TWILIO_SID") #Use SID of Sacramento City account provided in email
+value_of_auth=os.getenv("TWILIO_AUTH") #Auth Token of Sacramento City Account
 
 account_sid = os.environ["TWILIO_ACCOUNT_SID"]=value_of_sid
 auth_token = os.environ["TWILIO_AUTH_TOKEN"]=value_of_auth
