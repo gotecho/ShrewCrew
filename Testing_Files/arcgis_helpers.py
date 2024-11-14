@@ -86,9 +86,9 @@ def geocode(address: str, threshold=80) -> dict[str, dict]:
 
         
     if best_candidate:
-        gemini_prompt = f"{best_candidate['address']}. Is this a valid location in Sacramento? "
+        gemini_prompt = f"{best_candidate['address']}. Is a valid location in Sacramento. If a more accurate address is needed ask the user a follow up question"
     else:
-        gemini_prompt = f"The address {address} could not be matched. What could be a valid nearby location? "
+        gemini_prompt = f"The address {address} could not be matched to a location in sacramento. Promt user to find help line in their city. "
 
     
     gemini_response = generate_gemini_response(gemini_prompt)
@@ -109,4 +109,4 @@ if __name__ == "__main__":
             print(f"Matched Address: {result['address_data']}")
         
         print(f"Gemini Response: {result['gemini_response']}")
-        print("")
+        
