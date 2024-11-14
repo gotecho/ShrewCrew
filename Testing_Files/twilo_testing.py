@@ -22,7 +22,7 @@ def sms_reply():
     incoming_message = request.form['Body']
     gemini_response = gemini_testing.generate_gemini_response(incoming_message) # Trying to send twilio message to gemini
     resp = MessagingResponse()
-    resp.message(gemini_response.text)
+    resp.message(gemini_response)
     print(resp)
     return str(resp)
 
@@ -30,6 +30,6 @@ def sms_reply():
 message = client.messages.create(
     body="Join Earth's mightiest heroes. Like Kevin Bacon.", #Example Message, change to whatever you want to send
     from_="+1 916 914 8824", #Number provided by Sacramento City
-    to="+1 916 693 0232", #my own number, can change to your number if you need to for testing
+    to="+1 831 235 2665", #my own number, can change to your number if you need to for testing
 )
 

@@ -2,33 +2,9 @@ from datetime import datetime
 import requests
 import os
 from dotenv import load_dotenv
-import google.generativeai as genai
-
+from gemini_testing import generate_gemini_response
 
 load_dotenv()
-
-genai.configure(api_key=os.getenv('GOOGLE_API'))  # Store your API key in .env
-
-def generate_gemini_response(prompt: str) -> str:
-    """
-    Function to generate a response from Google Gemini using GenerativeModel.
-    prompt <string>: the prompt to send to Gemini
-    returns:
-        <string>: the response text from Gemini
-    """
-    try:
-        model = genai.GenerativeModel("gemini-1.5-flash") 
-        
-        response = model.generate_content(prompt)
-
-        if response.candidates and len(response.candidates) > 0:
-            return response.candidates[0].content.parts[0].text
-
-        return "No candidates found."
-
-    except Exception as e:
-        print(f"Error generating response: {e}")
-        return "Error generating response."
 
 def geocode(address: str, threshold=80) -> dict[str, dict]:
     """
@@ -86,7 +62,7 @@ def geocode(address: str, threshold=80) -> dict[str, dict]:
 
         
     if best_candidate:
-        gemini_prompt = f"{best_candidate['address']}. Is a valid location in Sacramento. If a more accurate address is needed ask the user a follow up question"
+        gemini_prompt = f"{best_candidate['address']}. Is a valid location in Sacramento. If a more accurate address is needed I need you to ask the user a follow up question"
     else:
         gemini_prompt = f"The address {address} could not be matched to a location in sacramento. Promt user to find help line in their city. "
 
