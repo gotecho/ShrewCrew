@@ -29,14 +29,14 @@ def sms_reply():
     print(f"twilio response: {str(resp)}")
     return str(resp)
 
-twilio_phone_number = "+1 916 914 8824"
+twilio_phone_number = "+1 916 914 8824" # sac city's provided phone number
 
 webhook_url = 'https://556a-98-41-39-122.ngrok-free.app/sms' # My ngrok local url with flask's /sms
+# note: link generated is different each time when running ./ngrok http 5000 on terminal. 
 client = Client(account_sid, auth_token)
 
-phone_number = client.incoming_phone_numbers.list(phone_number=twilio_phone_number)[0]
-phone_number.update(sms_url=webhook_url) # lists phone numbers associated with twilio account. 
-# Updates webhook URL that wilio will use when a message is received at provided phone number.
+phone_number = client.incoming_phone_numbers.list(phone_number=twilio_phone_number)[0] # lists phone numbers associated with twilio account. 
+phone_number.update(sms_url=webhook_url) # Updates webhook URL that twilio will use when a message is received at provided phone number.
 
 print(f"Webhook URL for {twilio_phone_number} updated to {webhook_url}")
 
