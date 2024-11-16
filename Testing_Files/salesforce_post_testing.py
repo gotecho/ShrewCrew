@@ -17,9 +17,8 @@ client_secret = os.getenv("SALESFORCE_SECRET_KEY")
 username = os.getenv("SALESFORCE_USERNAME")
 password = os.getenv("SALESFORCE_PASSWORD")
 grant_type = "password"
+url = os.getenv("SALESFORCE_URL")
 
-# test data to post to database
-my_data = {'Test Key': 'Test Value'}
 
 # create a dictionary to store authentication variables
 authenticate = {
@@ -38,19 +37,29 @@ response = requests.post(auth_url, data=authenticate)
 if response.status_code == 200:
     access_token = response.json().get("access_token")
     instance_url = response.json().get("instance_url")
-    print(f"Access Token: {access_token}, URL: {instance_url}")
+    print(f"Access Token: {access_token}, Instance URL: {instance_url}, URL from ENV: {url}")
 else:
     print("Couldn't get access token!")
     print(f"Error: {response.status_code}, {response.reason}")
 
-# use access url to post data
-response = requests.post(instance_url, json = my_data)
-
-# if successful, print success
-# else, print error
-if response.status_code == 200:
-    print("Success!")
-    print(response.json)
-else:
-    print(f"Error: {response.status_code}, {response.reason}")
+case_data = {
+    'Name' : 'John Doe',
+    'Description' : 'This is a test case',
+    'Phone Number' : '123-456-789'
+}
    
+
+case_url = f"{url}/sobjects/Case"
+
+headers={"Authorization": f"Bearer {access_token}"}
+
+
+case_response = requests.post(case_url, headers, json=case_data)
+
+if case_response.status_code not in (200, 201, 204):
+    print("Couldn't create test case!")
+    print(f"Error: {case_response.status_code}, {case_response.reason}")
+else:
+    case_id = case_response.json().get("id")
+    print(f"Case id: {case_id}")
+
