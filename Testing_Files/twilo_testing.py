@@ -31,7 +31,7 @@ def sms_reply():
 
 twilio_phone_number = "+1 916 914 8824" # sac city's provided phone number
 
-webhook_url = 'https://556a-98-41-39-122.ngrok-free.app/sms' # My ngrok local url with flask's /sms
+webhook_url = ' https://5f70-98-41-39-122.ngrok-free.app/sms' # My ngrok local url with flask's /sms
 # note: link generated is different each time when running ./ngrok http 5000 on terminal. 
 
 
