@@ -19,52 +19,51 @@ password = os.getenv("SALESFORCE_PASSWORD")
 grant_type = "password"
 
 # Prepare the payload for the OAuth request
-payload = {
-    "grant_type": grant_type,
-    "client_id": client_id,
-    "client_secret": client_secret,
-    "username": username,
-    "password": password
-}
+def auth_salesforce(): # authenticate salesforce
+    payload = {
+        "grant_type": grant_type,
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "username": username,
+        "password": password
+    }
 
 # Make a POST request to get the access token
-response = requests.post(auth_url, data=payload)
+    response = requests.post(auth_url, data=payload)
 
 # Check if the request was successful
-if response.status_code == 200:
-    # Parse the access token from the response
-    access_token = response.json().get("access_token")
-    instance_url = response.json().get("instance_url")
-    print(f"Access Token: {access_token}")
-    print(f"Instance URL: {instance_url}")
-else:
-    print(f"Failed to retrieve access token. Status Code: {response.status_code}, Response: {response.text}")
+    if response.status_code == 200:
+        # Parse the access token from the response
+        access_token = response.json().get("access_token")
+        instance_url = response.json().get("instance_url")
+        print(f"Access Token: {access_token}")
+        print(f"Instance URL: {instance_url}")
+        return access_token, instance_url
+    else:
+        print(f"Failed to retrieve access token. Status Code: {response.status_code}, Response: {response.text}")
+        return None, None
 
+def get_salesforce_case_data(case_id):
 # Set up the headers with the access token
-headers = {
-    "Authorization": f"Bearer {access_token}",
-    "Content-Type": "application/json"
-}
+    access_token, instance_url = auth_salesforce()
 
-case_id = "5001t00001AbCdEF" # Replace with actual case numbers later to test
+    if access_token and instance_url:
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json"
+        }
 
-# Salesforce API endpoint for retrieving a case by its ID
-case_url = f"{instance_url}/services/data/v52.0/sobjects/Case/{case_id}"
 
-# Make the GET request to fetch the case details
-response = requests.get(case_url, headers=headers)
+    # Salesforce API endpoint for retrieving a case by its ID
+        case_url = f"{instance_url}/services/data/v52.0/sobjects/Case/{case_id}"
 
-model = genai.GenerativeModel('gemini-1.5-flash-latest') # Uses the gemini model we are working with.
+    # Make the GET request to fetch the case details
+        response = requests.get(case_url, headers=headers)
+# Checking if request is successful before giving it to gemini
+    if response.status_code == 200:
+        return response.json
 
-response1 = model.generate_content(f"""Please relay the information from this json input {response.text} in
-                                   a conversational manor.""")
-
-print(response1.text)
-print()
-
-# Check if the request was successful
-if response.status_code == 200:
-    case_data = response.json()
-    print(f"Case Data: {case_data}")
-else:
-    print(f"Failed to retrieve case. Status Code: {response.status_code}, Response: {response.text}")
+    else:
+        print(f"Failed to retrieve case. Status Code: {response.status_code}, Response: {response.text}")
+        return None
+    return None
