@@ -27,6 +27,8 @@ def sms_reply():
     resp = MessagingResponse()
     resp.message(gemini_response)
     print(f"twilio response: {str(resp)}")
+    logger = g.Custom_Logger(request)
+    logger.info("Testing log info. Returned from messaging response.")
     return str(resp)
 
 twilio_phone_number = "+1 916 914 8824" # sac city's provided phone number
