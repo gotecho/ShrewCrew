@@ -32,12 +32,12 @@ For CSC 191...
 
 Timeline
 =======
-Sprint 1: Basic functionality, get familiar with the class and acquire a project.
-Sprint 2: Get formal documents in order, get basic functionality of twilio scripts and other components.
-Sprimnt 3: Create the visual dashboard for the twilio texting channel, make connections between components.
-Sprint 4: Add logging to all the components and connect the Gemini AI to the Twilio text channel.
-Sprint 5: Get Salesforce scripts working, advance the Twilio app, and link ArcGIS and Salesfore together.
-Sprint 6: Ensure the AI is able to work based on our designated flows (asking both types of questions and filing tickets)
-Sprint 7: Finalize testing, fix any bugs that may arise.
-Sprint 8: Finishing touches.
+- Sprint 1: Basic functionality, get familiar with the class and acquire a project.
+- Sprint 2: Get formal documents in order, get basic functionality of twilio scripts and other components.
+- Sprint 3: Create the visual dashboard for the twilio texting channel, make connections between components.
+- Sprint 4: Add logging to all the components and connect the Gemini AI to the Twilio text channel.
+- Sprint 5: Get Salesforce scripts working, advance the Twilio app, and link ArcGIS and Salesfore together.
+- Sprint 6: Ensure the AI is able to work based on our designated flows (asking both types of questions and filing tickets)
+- Sprint 7: Finalize testing, fix any bugs that may arise.
+- Sprint 8: Finishing touches.
 
