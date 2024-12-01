@@ -1,4 +1,6 @@
 # ShrewCrew
+ [Shrew logo.pdf](https://github.com/user-attachments/files/17967775/Shrew.logo.pdf)
+
 ShrewTechs
 =======
 - Team Leader: Anthony Vitro
