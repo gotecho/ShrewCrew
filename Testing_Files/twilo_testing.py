@@ -27,13 +27,13 @@ def sms_reply():
     resp = MessagingResponse()
     resp.message(gemini_response)
     print(f"twilio response: {str(resp)}")
-    logger = g.Custom_Logger(request)
-    logger.info("Testing log info. Returned from messaging response.")
+    #logger = g.Custom_Logger(request)
+    #logger.info("Testing log info. Returned from messaging response.")
     return str(resp)
 
 twilio_phone_number = "+1 916 914 8824" # sac city's provided phone number
 
-webhook_url = 'https://8fb6-98-41-39-122.ngrok-free.app/sms' # My ngrok local url with flask's /sms
+webhook_url = 'https://b653-130-86-97-63.ngrok-free.app/sms' # My ngrok local url with flask's /sms
 # note: link generated is different each time when running ./ngrok http 5000 on terminal. 
 
 
