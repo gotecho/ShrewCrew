@@ -1,6 +1,7 @@
 import sys
 import requests
 import os
+from arcgis_helpers import geocode
 from dotenv import load_dotenv
 
 
@@ -42,10 +43,20 @@ else:
     print("Couldn't get access token!")
     print(f"Error: {response.status_code}, {response.reason}")
 
+    # Verifies the address once salesforce post testing is working 
+def verify_address(address):
+    result = geocode(address)
+    if not result["is_sacramento"]:
+        print("Invalid address for Sacramento. Ticket will not be created.")
+        print(f"Gemini Response: {result['gemini_response']}")
+        sys.exit("Address verification failed")
+    return result["address_data"]
+
 case_data = {
     'Name' : 'John Doe',
     'Description' : 'This is a test case',
-    'Phone Number' : '123-456-789'
+    'Phone Number' : '123-456-789',
+    "Address": verify_address('1029 Betsy Ross Drive')
 }
    
 
@@ -54,7 +65,7 @@ case_url = f"{url}/sobjects/Case"
 headers={"Authorization": f"Bearer {access_token}"}
 
 
-case_response = requests.post(case_url, headers, json=case_data)
+case_response = requests.post(case_url, headers=headers, json=case_data)
 
 if case_response.status_code not in (200, 201, 204):
     print("Couldn't create test case!")
