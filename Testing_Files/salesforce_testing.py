@@ -17,6 +17,7 @@ client_secret = os.getenv("SALESFORCE_SECRET_KEY")
 username = os.getenv("SALESFORCE_USERNAME")
 password = os.getenv("SALESFORCE_PASSWORD")
 grant_type = "password"
+url = os.getenv("SALESFORCE_URL")
 
 # Prepare the payload for the OAuth request
 def auth_salesforce(): # authenticate salesforce
@@ -61,9 +62,12 @@ def get_salesforce_case_data(case_id):
         response = requests.get(case_url, headers=headers)
 # Checking if request is successful before giving it to gemini
     if response.status_code == 200:
+        print(response.text)
         return response.json
 
     else:
         print(f"Failed to retrieve case. Status Code: {response.status_code}, Response: {response.text}")
         return None
     return None
+
+get_salesforce_case_data('500WL00000AHk0fYAD')

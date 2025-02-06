@@ -53,10 +53,9 @@ def verify_address(address):
     return result["address_data"]
 
 case_data = {
-    'Name' : 'John Doe',
     'Description' : 'This is a test case',
-    'Phone Number' : '123-456-789',
-    "Address": verify_address('1029 Betsy Ross Drive')
+    #'ContactPhone' : '123-456-7890',
+    #"Address": '1029 Betsy Ross Drive'
 }
    
 
@@ -66,6 +65,7 @@ headers={"Authorization": f"Bearer {access_token}"}
 
 
 case_response = requests.post(case_url, headers=headers, json=case_data)
+print(case_response.json())
 
 if case_response.status_code not in (200, 201, 204):
     print("Couldn't create test case!")
