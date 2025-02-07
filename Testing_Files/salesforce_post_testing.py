@@ -53,9 +53,7 @@ def verify_address(address):
     return result["address_data"]
 
 case_data = {
-    'Description' : 'This is a test case',
-    #'ContactPhone' : '123-456-7890',
-    #"Address": '1029 Betsy Ross Drive'
+    'Description' : 'Hello World!'
 }
    
 
