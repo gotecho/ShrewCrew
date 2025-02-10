@@ -1,0 +1,31 @@
+body {
+    font-family: Lato, sans-serif;
+    height: 100vh;
+    display:grid;
+    justify-content:center;
+    align-items:center;
+    background-color: rgb(152, 153, 153);
+    
+}
+table{
+    border-collapse: collapse;
+    box-shadow:20px 20px 20px 5px gray;
+    background-color: white;
+    text-align:left;
+
+    
+}
+th{
+    background-color: cadetblue;
+    padding:0.75rem 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    font-weight: 900;
+}
+td{
+    padding:1rem 2rem;
+
+}
+tr:nth-child(even){
+    background-color: rgb(212, 212, 212);
+}
