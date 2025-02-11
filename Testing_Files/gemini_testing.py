@@ -19,7 +19,7 @@ def generate_gemini_response(prompt: str) -> str:
             <string>: the response text from Gemini
         """
         try:
-            model = genai.GenerativeModel("gemini-1.5-flash") 
+            model = genai.GenerativeModel("gemini-pro") 
             response = model.generate_content(prompt)
 
             if response.candidates and len(response.candidates) > 0:

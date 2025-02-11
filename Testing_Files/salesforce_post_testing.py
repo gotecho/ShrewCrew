@@ -1,6 +1,7 @@
 import sys
 import requests
 import os
+import gemini_prompt_testing
 from arcgis_helpers import geocode
 from dotenv import load_dotenv
 
@@ -20,6 +21,7 @@ password = os.getenv("SALESFORCE_PASSWORD")
 grant_type = "password"
 url = os.getenv("SALESFORCE_URL")
 
+gemini_prompt_testing.collect_ticket_info()
 
 # create a dictionary to store authentication variables
 authenticate = {
@@ -52,8 +54,10 @@ def verify_address(address):
         sys.exit("Address verification failed")
     return result["address_data"]
 
+
+
 case_data = {
-    'Description' : 'Hello World!'
+    'Description' : gemini_prompt_testing.retrieve_ticket_info()
 }
    
 
