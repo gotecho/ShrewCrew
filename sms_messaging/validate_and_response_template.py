@@ -1,13 +1,22 @@
+import firebase_admin
+from firebase_admin import credentials, firestore
 from dotenv import load_dotenv
 from flask import Flask, request, Response  # type: ignore
 from twilio.twiml.messaging_response import MessagingResponse
 from msg_receive import fetch_sms
 
+
 app = Flask(__name__)
 
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
-service_request_session = {}
+# service_request_session = {}
+
+# Initialize Firebase
+credentials = credentials.Certificate("firebase_credentials.json")
+firebase_admin.initialize_app(credentials)
+# Reference the Firestore database
+database = firestore.client()
 
 # Dictionary of responses
 animal_care_request_options = {
@@ -29,6 +38,20 @@ def verify_service_request(message):
     return message.startswith('Service Request:')
     # 'Service Request' can be changed to something else if need be
 
+def save_service_request(phone_number, request_type, status="Pending"):
+    """Save a new service request to Firestore"""
+    doc_ref = db.collection("service_requests").document(phone_number)
+    doc_ref.set({
+        "phone_number": phone_number,
+        "request_type": request_type,
+        "status": status
+    })
+
+def update_request_status(phone_number, new_status):
+    """Update the status of an existing request in Firestore"""
+    doc_ref = db.collection("service_requests").document(phone_number)
+    doc_ref.update({"status": new_status})
+
 @app.route('/sms', methods=['POST'])
 def request_response():
     received_sms = request.form.get('Body', '').strip().lower()
@@ -36,55 +59,43 @@ def request_response():
     user_phone_number = request.form.get('From', '') 
     resp = MessagingResponse()
 
-    # Need to figure out how to implement multiple reports from one number
-    if user_phone_number in service_request_session:
-        curr_session = service_request_session[user_phone_number]['state']
-        if curr_session == 'active':
-            resp.message(
-                'You currently have an active service '
-                + 'request. What information do you wish to know? '
-                + 'Please, select from the following: ')
-                # link follow up items
-        elif curr_session == 'awaiting_animal_info':
-            resp.message(
-                'Thank you for providing needed additional information. '
-                + 'Is there anything else you\'d like to report?'
-                )
-            curr_session[user_phone_number]['state'] = 'completed'
-        elif curr_session == 'completed':
-            resp.message(
-                'Thank you for using Sacramento\'s 311 text channel. '
-                + 'You will momentarily receive a message regarding '
-                + 'your level(s) of satisfaction'
-                )
-        elif received_sms == 'done':
-            resp.message(
-                'Thank you for using Sacramento\'s 311 text channel. '
-                + 'Goodbye!'
-                )
-            del curr_session[user_phone_number]
+    # Check Firestore for an existing request
+    doc_ref = db.collection("service_requests").document(user_phone_number)
+    request_data = doc_ref.get()
 
-    else:    
+    if request_data.exists:
+        data = request_data.to_dict()
+        curr_state = data.get("status")
+
+        if curr_state == "active":
+            resp.message("You currently have an active service request. What would you like to know?")
+        elif curr_state == "awaiting_animal_info":
+            resp.message("Thank you for providing additional details. Your request is being processed.")
+            update_request_status(user_phone_number, "completed")
+        elif curr_state == "completed":
+            resp.message("Your service request is complete. Thank you for using Sacramento 311.")
+        elif received_sms == "done":
+            resp.message("Thank you for using Sacramento 311. Goodbye!")
+            doc_ref.delete()
+    else:
         if verify_service_request(received_sms):
-            # animal_care_options can be switched out for another service type
-            # need to figure out how to better implement service type handling
+            matched = False
             for keyphrase, response_msg in animal_care_request_options.items():
                 if keyphrase in received_sms:
                     resp.message(response_msg)
-                    details = {'next_details' : 'awaiting_animal_info'}
-                    service_request_session[user_phone_number] = {'state': details['next_details']}
+                    save_service_request(user_phone_number, keyphrase, "awaiting_animal_info")
+                    matched = True
                     break
-                else:
-                    resp.message(
-                        'Thank you for using Sacramento\'s 311 text '
-                        + 'channel. For a list of Animal Care Request '
-                        + 'options, please type "menu".'
-                        )
+            if not matched:
+                resp.message("Invalid request. Please type 'menu' for options.")
+        elif received_sms == "status":
+            request_entry = db.collection("service_requests").document(user_phone_number).get()
+            if request_entry.exists:
+                data = request_entry.to_dict()
+                resp.message(f"Your request ({data['request_type']}) is currently: {data['status']}.")
+            else:
+                resp.message("No active service request found.")
         else:
-            resp.message(
-                'Your message is not a valid service request. Please '
-                + 'use the following format: "Service Request: '
-                + '[your service request]"'
-                )
-    
-    return Response(str(resp), mimetype = 'text/xml')
+            resp.message("Invalid request format. Please use: 'Service Request: [your request]'")
+
+    return Response(str(resp), mimetype='text/xml')
