@@ -1,0 +1,27 @@
+{
+  "playbook": {
+    "playbook": {
+      "displayName": "Abandoned Vehicle Case",
+      "goal": "Help users file a case for an abandoned vehicle. \nYou will need to get the make and model, color, and location of the abandoned vehicle from the user. ",
+      "steps": [ {
+        "text": "Ask the user for the make and model, color, and location of the abandoned vehicle."
+      }, {
+        "text": "If the user has not provided a make and model, ask them for the make and model of the abandoned vehicle."
+      }, {
+        "text": "If the user has not provided a color, ask them for the color of the abandoned vehicle."
+      }, {
+        "text": "If the user has not provided a location, ask them for the location of the abandoned vehicle."
+      }, {
+        "text": "Once the user has given a make and model, color, and location, repeat the provided information and ask them to confirm it."
+      }, {
+        "text": "Once the user has confirmed the given information, let them know the case has been filed."
+      } ],
+      "etag": "67b62b72",
+      "playbookId": "0eeb7145-2bfc-4748-95bf-820fae5cc298",
+      "tokenCount": 171,
+      "codeBlock": {
+      
+      }
+    }
+  }
+}
