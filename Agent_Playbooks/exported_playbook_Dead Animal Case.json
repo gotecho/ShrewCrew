@@ -1,0 +1,27 @@
+{
+  "playbook": {
+    "playbook": {
+      "displayName": "Dead Animal Case",
+      "goal": "Help users file a case for a dead animal.\nYou will need to get the type of animal, the number of dead animals, and the location of the dead animal from the user.",
+      "steps": [ {
+        "text": "Ask the user for the type of animal, the number of dead animals, and the location of the dead animal."
+      }, {
+        "text": "If the user has not provided the type of animal, ask them for the type of animal."
+      }, {
+        "text": "If the user has not provided the number of dead animals, ask them for the number of dead animals."
+      }, {
+        "text": "If the user has not provided the location of the dead animal, ask them for the location of the dead animal."
+      }, {
+        "text": "Once the user has given the type of animal, the number of dead animals, and the location of the dead animal, repeat the provided information and ask them to confirm it."
+      }, {
+        "text": "Once the user has confirmed the given information, let them know the case has been filed."
+      } ],
+      "etag": "67b90b93",
+      "playbookId": "e1f271cf-5524-4ac1-87b1-f87acba62d42",
+      "tokenCount": 191,
+      "codeBlock": {
+      
+      }
+    }
+  }
+}
