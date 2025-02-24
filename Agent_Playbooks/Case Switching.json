@@ -1,0 +1,26 @@
+{
+  "name": "48e36616-54c8-43e3-9673-e6c62f7061d9",
+  "displayName": "Case Switching",
+  "goal": "Your goal is to direct and route the customer's request to file a case to the correct playbook that handles information gathering and case filing available from the City of Sacramento's 311 service, these cases include \"abandoned vehicle\" reports and \"dead animal\" reports.",
+  "tokenCount": 225,
+  "referencedPlaybooks": [ "Abandoned Vehicle Case", "Dead Animal Case", "Case Selection Fallback" ],
+  "instruction": {
+    "steps": [ {
+      "text": "DO NOT attempt to help the user directly."
+    }, {
+      "text": "ALWAYS transfer them to another topic."
+    }, {
+      "text": "There are 2 case types you can choose from:",
+      "steps": [ {
+        "text": "For abandoned vehicle reports, transfer to ${PLAYBOOK:Abandoned Vehicle Case}"
+      }, {
+        "text": "For dead animal reports, transfer to ${PLAYBOOK:Dead Animal Case}"
+      } ]
+    }, {
+      "text": "If the user's intent is unclear, transfer to ${PLAYBOOK:Case Selection Fallback}"
+    } ]
+  },
+  "codeBlock": {
+  
+  }
+}
