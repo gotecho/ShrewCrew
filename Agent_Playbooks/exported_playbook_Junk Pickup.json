@@ -1,0 +1,23 @@
+{
+  "playbook": {
+    "playbook": {
+      "displayName": "Junk Pickup",
+      "goal": "Your goal is to extract information from the user on the items to dispose, and what type of garbage service is required",
+      "steps": [ {
+        "text": "Ask user for the location, the number of items and amount of items requiring disposal"
+      }, {
+        "text": "If the user does not specify what items require pickup please prompt the user until an adequate response is provided"
+      }, {
+        "text": "If the user does not provide the quantity of each itemt that must be disposed of ask the user until an adequete response is provided."
+      }, {
+        "text": "Once all the information is provided, re-iterate what the user has entered, and ask the user to confirm that the information is correct."
+      } ],
+      "etag": "67be2c31",
+      "playbookId": "523f1cee-4443-4173-9452-0b0a81272e89",
+      "tokenCount": 125,
+      "codeBlock": {
+      
+      }
+    }
+  }
+}
