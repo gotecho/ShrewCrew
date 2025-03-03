@@ -88,4 +88,66 @@ def abandonedVehicle():
         return jsonify({"Success": False, "Error": str(error)}), 500
 
 
+@main.route('/animal_location', methods=['POST'])
+def animalLocation():
+    try:
+        token = getToken()
+        case_url = f"{url}/sobjects/Case"
+        headers = {"Authorization": f"Bearer {token}"}
 
+        data = request.json
+
+        location = data.get("Location")
+
+        case_data = {
+            "Description" : {
+                "Animal Location": location
+            }
+        }
+        case_response = request.post(case_url, headers=headers, json=case_data)
+        return jsonify({"Success": True, "SalesForce Response": case_response.json})
+    except Exception as error:
+        return jsonify({"Success": False, "Error": str(error)}), 500
+
+@main.route('/animal_type', methods=['POST'])
+def animalType():
+    try:
+        token = getToken()
+        case_url = f"{url}/sobjects/Case"
+        headers = {"Authorization": f"Bearer {token}"}
+
+        data = request.json
+
+        animalType = data.get("AnimalType")
+
+        case_data = {
+            "Description" : {
+                "Animal Type": animalType
+            }
+        }
+        case_response = request.post(case_url, headers=headers, json=case_data)
+        return jsonify({"Success": True, "SalesForce Response": case_response.json})
+    except Exception as error:
+        return jsonify({"Success": False, "Error": str(error)}), 500
+
+
+@main.route('/animal_total', methods=['POST'])
+def animalTotal():
+    try:
+        token = getToken()
+        case_url = f"{url}/sobjects/Case"
+        headers = {"Authorization": f"Bearer {token}"}
+
+        data = request.json
+
+        animalTotal = data.get("AnimalTotal")
+
+        case_data = {
+            "Description" : {
+                "Animal Total": animalTotal
+            }
+        }
+        case_response = request.post(case_url, headers=headers, json=case_data)
+        return jsonify({"Success": True, "SalesForce Response": case_response.json})
+    except Exception as error:
+        return jsonify({"Success": False, "Error": str(error)}), 500
