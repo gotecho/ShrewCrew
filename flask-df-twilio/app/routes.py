@@ -88,8 +88,8 @@ def abandonedVehicle():
         return jsonify({"Success": False, "Error": str(error)}), 500
 
 
-@main.route('/animal_location', methods=['POST'])
-def animalLocation():
+@main.route('/dead_animal', methods=['POST'])
+def deadAnimal():
     try:
         token = getToken()
         case_url = f"{url}/sobjects/Case"
@@ -97,11 +97,31 @@ def animalLocation():
 
         data = request.json
 
-        location = data.get("Location")
+        location = data.get("location")
+        animalType = data.get("animalType")
+        animalTotal = data.get("animalTotal")
+
+        if location == "Right of Way": 
+            chamActivityType = "DEAD ST"
+            chamActivitySubType = "DEAD ST"
+            chamPriority = 4
+        elif location == "Private Property":
+            chamActivityType = "DEAD PP"
+            chamActivitySubType = "DEAD PP"
+            chamPriority = 4
+
+        
+
 
         case_data = {
             "Description" : {
-                "Animal Location": location
+                "Animal Location": location,
+                "Animal Type": animalType,
+                "Animal Total": animalTotal,
+                "CHAMELEON Activity Type": chamActivityType,
+                "CHAMELEON Activity Sub Type": chamActivitySubType,
+                "CHAMELEON Priority": chamPriority
+
             }
         }
         case_response = request.post(case_url, headers=headers, json=case_data)
@@ -109,45 +129,3 @@ def animalLocation():
     except Exception as error:
         return jsonify({"Success": False, "Error": str(error)}), 500
 
-@main.route('/animal_type', methods=['POST'])
-def animalType():
-    try:
-        token = getToken()
-        case_url = f"{url}/sobjects/Case"
-        headers = {"Authorization": f"Bearer {token}"}
-
-        data = request.json
-
-        animalType = data.get("AnimalType")
-
-        case_data = {
-            "Description" : {
-                "Animal Type": animalType
-            }
-        }
-        case_response = request.post(case_url, headers=headers, json=case_data)
-        return jsonify({"Success": True, "SalesForce Response": case_response.json})
-    except Exception as error:
-        return jsonify({"Success": False, "Error": str(error)}), 500
-
-
-@main.route('/animal_total', methods=['POST'])
-def animalTotal():
-    try:
-        token = getToken()
-        case_url = f"{url}/sobjects/Case"
-        headers = {"Authorization": f"Bearer {token}"}
-
-        data = request.json
-
-        animalTotal = data.get("AnimalTotal")
-
-        case_data = {
-            "Description" : {
-                "Animal Total": animalTotal
-            }
-        }
-        case_response = request.post(case_url, headers=headers, json=case_data)
-        return jsonify({"Success": True, "SalesForce Response": case_response.json})
-    except Exception as error:
-        return jsonify({"Success": False, "Error": str(error)}), 500
