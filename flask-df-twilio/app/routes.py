@@ -70,6 +70,7 @@ def abandonedVehicle():
         color = data.get("vehicleColor")
         license = data.get("licensePlate")
         daysAbandoned = data.get("timePeriod")
+        location = data.get("location")
 
         case_data = {
             "Description" : {
@@ -77,7 +78,9 @@ def abandonedVehicle():
                 "Vehicle Model": model,
                 "Vehicle Color": color,
                 "License Plate Number": license,
-                "# of Days Abandoned": daysAbandoned
+                "# of Days Abandoned": daysAbandoned,
+                "Location of Vehicle": location
+
             }
         }
 
