@@ -2,7 +2,6 @@ from datetime import datetime
 import requests
 import os
 from dotenv import load_dotenv
-from gemini_testing import generate_gemini_response
 
 load_dotenv()
 
@@ -60,17 +59,10 @@ def geocode(address: str, threshold=80) -> dict[str, dict]:
     world_data = world_response.json()
     best_candidate, is_sacramento = _find_best_candidate(world_data, threshold=threshold)
 
-        
-    if best_candidate:
-        gemini_prompt = f"{best_candidate['address']}. Is a valid location in Sacramento. If a more accurate address is needed I need you to ask the user a follow up question"
-    else:
-        gemini_prompt = f"The address {address} could not be matched to a location in sacramento. Promt user to find help line in their city. "
-
     
-    gemini_response = generate_gemini_response(gemini_prompt)
 
     # Return dict indicating if Sacramento candidate is found or the closest address otherwise
-    return {"is_sacramento": is_sacramento, "address_data": best_candidate['address'],"gemini_response": gemini_response}
+    return {"is_sacramento": is_sacramento, "address_data": best_candidate['address']}
 
 
 if __name__ == "__main__":
@@ -83,6 +75,4 @@ if __name__ == "__main__":
         else:
             print(f"Is Sacramento: {result['is_sacramento']}")
             print(f"Matched Address: {result['address_data']}")
-        
-        print(f"Gemini Response: {result['gemini_response']}")
         
