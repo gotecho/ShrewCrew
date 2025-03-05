@@ -117,6 +117,84 @@ def push_to_salesforce_generic():
 
     except Exception as e:
         return jsonify({"success": False, "error": "Server error", "details": str(e)}), 500
+    
+
+@app.route('/file-abandoned-vehicle', methods=['POST'])
+def abandonedVehicle():
+    try:
+        token = getToken() 
+        case_url = f"{url}/sobjects/Case"
+        headers={"Authorization": f"Bearer {token}"}
+
+        data = request.json
+        make = data.get("make")
+        model = data.get("model")
+        color = data.get("vehicleColor")
+        license = data.get("licensePlate")
+        daysAbandoned = data.get("timePeriod")
+        location = data.get("location")
+
+        case_data = {
+            "Description" : {
+                "Vehicle Make": make,
+                "Vehicle Model": model,
+                "Vehicle Color": color,
+                "License Plate Number": license,
+                "# of Days Abandoned": daysAbandoned,
+                "Location of Vehicle": location
+
+            }
+        }
+
+        case_response = requests.post(case_url, headers=headers, json=case_data)
+        case_id = case_response.json().get("id")
+
+        return jsonify({"Success": True, "Case Id": case_id})
+    
+    except Exception as error:
+        return jsonify({"Success": False, "Error": str(error)}), 500
+
+
+@app.route('/dead_animal', methods=['POST'])
+def deadAnimal():
+    try:
+        token = getToken()
+        case_url = f"{url}/sobjects/Case"
+        headers = {"Authorization": f"Bearer {token}"}
+
+        data = request.json
+
+        location = data.get("location")
+        animalType = data.get("animalType")
+        animalTotal = data.get("animalTotal")
+
+        if location == "Right of Way": 
+            chamActivityType = "DEAD ST"
+            chamActivitySubType = "DEAD ST"
+            chamPriority = 4
+        elif location == "Private Property":
+            chamActivityType = "DEAD PP"
+            chamActivitySubType = "DEAD PP"
+            chamPriority = 4
+
+        
+
+
+        case_data = {
+            "Description" : {
+                "Animal Location": location,
+                "Animal Type": animalType,
+                "Animal Total": animalTotal,
+                "CHAMELEON Activity Type": chamActivityType,
+                "CHAMELEON Activity Sub Type": chamActivitySubType,
+                "CHAMELEON Priority": chamPriority
+
+            }
+        }
+        case_response = request.post(case_url, headers=headers, json=case_data)
+        return jsonify({"Success": True, "SalesForce Response": case_response.json})
+    except Exception as error:
+        return jsonify({"Success": False, "Error": str(error)}), 500
 
 
 
