@@ -85,7 +85,9 @@ def abandonedVehicle():
         }
 
         case_response = requests.post(case_url, headers=headers, json=case_data)
-        return jsonify({"Success": True, "SalesForce Response": case_response.json()})
+        case_id = case_response.json().get("id")
+
+        return jsonify({"Success": True, "Case Id": case_id})
     
     except Exception as error:
         return jsonify({"Success": False, "Error": str(error)}), 500
