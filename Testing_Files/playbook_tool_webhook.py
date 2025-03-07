@@ -124,7 +124,7 @@ def abandonedVehicle():
     try:
         token = getToken() 
         case_url = f"{url}/sobjects/Case"
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json",}
 
         data = request.json
         make = data.get("make")
