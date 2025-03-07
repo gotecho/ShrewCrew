@@ -191,7 +191,7 @@ def deadAnimal():
 
             }
         }
-        case_response = request.post(case_url, headers=headers, json=case_data)
+        case_response = requests.post(case_url, headers=headers, json=case_data)
         return jsonify({"Success": True, "SalesForce Response": case_response.json})
     except Exception as error:
         return jsonify({"Success": False, "Error": str(error)}), 500
