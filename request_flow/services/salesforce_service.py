@@ -2,6 +2,7 @@ from simple_salesforce import Salesforce, SalesforceAuthenticationFailed, Salesf
 import os
 import logging
 
+# Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Authenticate creds and connect to sf
