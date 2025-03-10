@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import requests
 import arcgis_helpers as a
 import sys
+import traceback 
 import requests
 import os
 from dotenv import load_dotenv
@@ -124,7 +125,7 @@ def abandonedVehicle():
     try:
         token = getToken() 
         case_url = f"{url}/sobjects/Case"
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json",}
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
         data = request.json
         make = data.get("make")
@@ -135,16 +136,9 @@ def abandonedVehicle():
         location = data.get("location")
 
         case_data = {
-            "Description" : {
-                "Vehicle Make": make,
-                "Vehicle Model": model,
-                "Vehicle Color": color,
-                "License Plate Number": license,
-                "# of Days Abandoned": daysAbandoned,
-                "Location of Vehicle": location
-
-            }
+            "Description": f"Vehicle Make: {make}, Vehicle Model: {model}, Vehicle Color: {color}, License Plate Number: {license}, # of Days Abandoned: {daysAbandoned}, Location of Vehicle: {location}"
         }
+
 
         case_response = requests.post(case_url, headers=headers, json=case_data)
         case_id = case_response.json().get("id")
@@ -152,7 +146,8 @@ def abandonedVehicle():
         return jsonify({"Success": True, "Case Id": case_id})
     
     except Exception as error:
-        return jsonify({"Success": False, "Error": str(error)}), 500
+        errorMessage = traceback.format_exc()
+        return jsonify({"Success": False, "Error": errorMessage}), 500
 
 
 @app.route('/dead_animal', methods=['POST'])
