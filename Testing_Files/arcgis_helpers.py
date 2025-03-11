@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def _geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str, dict]:
+def geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str, dict]:
     """
     Function to validate an address string though both world geocoder and City's internal geocoder
         address <string>: address string
@@ -69,7 +69,6 @@ def _geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[st
     world_response = requests.get(url, params=params)
 
     duration = round((datetime.now() - start).microseconds / 1000)
-    salesforce_case_object.benchmarks.update({"world_geocoder" : duration})
 
 
     world_candidate = _find_candidate(world_response.json(), threshold=threshold)
@@ -95,7 +94,7 @@ def _geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[st
         county = world_candidate["candidates"][0]["attributes"]["Subregion"]
         zip_code = world_candidate["candidates"][0]["attributes"]["Postal"]
 
-        city_geocoder_url = (os.getenv("CITY_GIS_URL") + "ADDRESS_AND_STREETS/GeocodeServer/findAddressCandidates?")
+        city_geocoder_url = (os.getenv("EXTERNAL_GIS_URL") + "ADDRESS_AND_STREETS/GeocodeServer/findAddressCandidates?")
         params = {
             "Street": street,
             "City": city,
@@ -110,11 +109,13 @@ def _geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[st
         start = datetime.now()
 
         city_response = requests.get(url=city_geocoder_url, params=params)
+        print(f"Response Status Code: {city_response.status_code}")
+        print(f"Response Headers: {city_response.headers}")
+        print(f"Response Text: {city_response.text}")
         
         duration = round((datetime.now() - start).microseconds / 1000)
-        salesforce_case_object.benchmarks.update({"city_geocoder" : duration})
         
-        body = city_response.json()
+        body = city_response.get_json()
         
         if ("candidates" in body and len(body["candidates"]) > 0):
             internal_candidate = _find_candidate(json_input=body, threshold=threshold)
@@ -122,7 +123,7 @@ def _geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[st
         overview = {"address": address, "city": city, "county": county}
 
     else:
-        city_geocoder_url = (os.getenv("CITY_GIS_URL") + "ADDRESS_AND_STREETS/GeocodeServer/findAddressCandidates?")
+        city_geocoder_url = (os.getenv("EXTERNAL_GIS_URL") + "ADDRESS_AND_STREETS/GeocodeServer/findAddressCandidates?")
         params = {
             "SingleLine": address,
             "outFields": "*",
@@ -136,7 +137,6 @@ def _geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[st
         city_response = requests.get(city_geocoder_url, params=params)
         
         duration = round((datetime.now() - start).microseconds / 1000)
-        salesforce_case_object.benchmarks.update({"city_geocoder" : duration})
         
         body = city_response.json()
         
@@ -155,11 +155,10 @@ def _geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[st
 if __name__ == "__main__":
     addresses = ['1029 Betsy Ross Dr', "J street", 'foothills blvd']
     for address in addresses:
-        result = _geocode(address)
+        result = geocode(address)
         print(f"Address: {address}")
         if result['address_data'] is None:
             print("No valid address found.")
         else:
             print(f"Is Sacramento: {result['is_sacramento']}")
             print(f"Matched Address: {result['address_data']}")
-        
