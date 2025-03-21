@@ -1,5 +1,20 @@
 import os
 from twilio.rest import Client
+from twilio.request_validator import RequestValidator
+from flask import request, abort
+
+def verify_twilio_request():
+    auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
+    if not auth_token:
+        raise Exception("TWILIO_AUTH_TOKEN is not set in environment variables")
+
+    validator = RequestValidator(auth_token)
+    request_url = request.url
+    request_params = request.form.to_dict()
+    twilio_signature = request.headers.get("X-Twilio-Signature", "")
+
+    if not validator.validate(request_url, request_params, twilio_signature):
+        abort(403, description="Request not from Twilio.")
 
 def send_sms(to, message):
     client = Client(os.getenv("TWILIO_ACCOUNT_SID"), os.getenv("TWILIO_AUTH_TOKEN"))

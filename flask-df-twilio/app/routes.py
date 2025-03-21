@@ -1,11 +1,14 @@
 from flask import Blueprint, request, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
 from app.dialogflow_cx import detect_intent_text
+from app.twilio_sms import verify_twilio_request
 
 main = Blueprint('main', __name__)
 
 @main.route('/sms', methods=['POST'])
 def sms_reply():
+    verify_twilio_request()
+    
     incoming_msg = request.form.get('Body')
     sender_number = request.form.get('From')
 
