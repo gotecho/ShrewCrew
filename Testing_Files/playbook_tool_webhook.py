@@ -2,9 +2,9 @@ from flask import Flask, request, jsonify
 import requests
 import arcgis_helpers as a
 import sys
+import requests
 import os
 from dotenv import load_dotenv
-import traceback
 
 app = Flask(__name__)
 
@@ -67,51 +67,27 @@ def push_to_salesforce_generic():
         token = getToken() 
         case_url = f"{url}/sobjects/Case"
         # Extract request JSON
-        data = request.get_json()
+        data = request.json
 
         # Extract fields from request body
-        first_name = str(data.get("firstName", "")).strip()
-        last_name = str(data.get("lastName", "")).strip()
-        phone = str(data.get("phone", "0")).strip()
-        issue_type = str(data.get("issueType", "General Inquiry")).strip()
-        description = str(data.get("description", "")).strip()
-        address = str(data.get("address", "")).strip()
-        addr_resp = a.geocode(address, 90)["internal_geocoder"]
-    
-
-        if len(addr_resp) == 0:
-            return jsonify({
-                "success": False,
-                "error": "Address is outside the service area",
-                "details": "The provided address is not within the supported region."
-            }), 401  # Return 401 Bad Request out of sacramento
+        first_name = data.get("firstName", "").strip()
+        last_name = data.get("lastName", "").strip()
+        phone = data.get("phone", "0").strip()
+        issue_type = data.get("issueType", "General Inquiry").strip()
+        description = data.get("description", "").strip()
 
         # Determine if the case is anonymous
         is_anonymous = not first_name and not last_name
 
         # Construct Salesforce request payload
         case_payload = {
-            "Subject": f"{issue_type} - {'Anonymous' if is_anonymous else f'''{first_name if first_name else ''} {last_name if last_name else ''}'''.strip()}",
+            "Subject": f"{issue_type} - {'Anonymous' if is_anonymous else first_name + ' ' + last_name}",
             "Status": "New",
             "Description": description,
             "Origin": "Web",
             "Priority": "Medium",
             "ContactMobile": None if is_anonymous else phone,
         }
-
-        # Add geocoded address fields if available
-        if addr_resp and "candidates" in addr_resp and addr_resp["candidates"]:
-            candidate = addr_resp["candidates"][0]  # Get the first result
-
-            case_payload.update({
-                "Address_Geolocation__Latitude__s": candidate.get("location", {}).get("y"),
-                "Address_Geolocation__Longitude__s": candidate.get("location", {}).get("x"),
-                "Address_X__c": candidate.get("attributes", {}).get("X"),
-                "Address_Y__c": candidate.get("attributes", {}).get("Y"),
-                "Address__c": candidate.get("address"),
-                "GIS_City__c": candidate.get("attributes", {}).get("City"),
-                "Street_Center_Line__c": candidate.get("attributes", {}).get("Loc_name"),
-            })
 
         # Remove None values
         case_payload = {k: v for k, v in case_payload.items() if v is not None}
@@ -140,10 +116,6 @@ def push_to_salesforce_generic():
             }), response.status_code
 
     except Exception as e:
-        print(traceback.format_exc())
-    
-        # Extract the line number from the last frame of the traceback
-        print(str(e))
         return jsonify({"success": False, "error": "Server error", "details": str(e)}), 500
     
 
@@ -152,9 +124,9 @@ def abandonedVehicle():
     try:
         token = getToken() 
         case_url = f"{url}/sobjects/Case"
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json",}
+        headers={"Authorization": f"Bearer {token}"}
 
-        data = request.get_json()
+        data = request.json
         make = data.get("make")
         model = data.get("model")
         color = data.get("vehicleColor")
@@ -190,7 +162,7 @@ def deadAnimal():
         case_url = f"{url}/sobjects/Case"
         headers = {"Authorization": f"Bearer {token}"}
 
-        data = request.get_json()
+        data = request.json
 
         location = data.get("location")
         animalType = data.get("animalType")
@@ -219,7 +191,7 @@ def deadAnimal():
 
             }
         }
-        case_response = requests.post(case_url, headers=headers, json=case_data)
+        case_response = request.post(case_url, headers=headers, json=case_data)
         return jsonify({"Success": True, "SalesForce Response": case_response.json})
     except Exception as error:
         return jsonify({"Success": False, "Error": str(error)}), 500

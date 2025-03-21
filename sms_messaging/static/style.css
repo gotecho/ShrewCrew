@@ -15,12 +15,6 @@ table{
 
     
 }
-header{
-    text-align: center;
-    background-color: aquamarine;
-    font-size: 30px;
-    font-family:'Courier New', Courier, monospace;
-}
 th{
     background-color: cadetblue;
     padding:0.75rem 2rem;
