@@ -1,14 +1,17 @@
 from flask import Flask, request, jsonify
 import requests
-import arcgis_helpers as a
+import dialogflow_tools.arcgis_helpers as a
 import sys
 import os
 from dotenv import load_dotenv
 import traceback
+import logging
+from dialogflow_tools.scraper import scrape_city_data
 
 app = Flask(__name__)
 
 load_dotenv()
+
 
 auth_url = os.getenv("SALESFORCE_AUTH_URL")
 client_id = os.getenv("SALESFORCE_CLIENT_ID")
@@ -68,6 +71,10 @@ def push_to_salesforce_generic():
         case_url = f"{url}/sobjects/Case"
         # Extract request JSON
         data = request.get_json()
+        response = requests.get("https://api64.ipify.org?format=json")
+        public_ip = response.json()["ip"]
+
+        print(f"Your public IP address is: {public_ip}")
 
         # Extract fields from request body
         first_name = str(data.get("firstName", "")).strip()
@@ -141,9 +148,6 @@ def push_to_salesforce_generic():
 
     except Exception as e:
         print(traceback.format_exc())
-    
-        # Extract the line number from the last frame of the traceback
-        print(str(e))
         return jsonify({"success": False, "error": "Server error", "details": str(e)}), 500
     
 
@@ -223,8 +227,33 @@ def deadAnimal():
         return jsonify({"Success": True, "SalesForce Response": case_response.json})
     except Exception as error:
         return jsonify({"Success": False, "Error": str(error)}), 500
+    
+    
+@app.route("/311-data", methods=["POST"])
+def scrape_and_return_data():
+    try:
+        user_query = request.json.get('userQuery', '')
+        
+        if not user_query:
+            return jsonify({
+                "success": False,
+                "error": "Missing 'userQuery' in the request body"
+            }), 400
+        
+        # Scrape data based on the query
+        data = scrape_city_data(user_query)
+
+        return jsonify(data), 200
+
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+        return jsonify({
+            "success": False,
+            "error": "Failed to scrape data",
+            "details": str(e)
+        }), 500
 
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001)
+    app.run(host="0.0.0.0", port=8080)

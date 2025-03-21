@@ -4,6 +4,7 @@ import os
 from operator import itemgetter
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 def geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str, dict]:
@@ -30,6 +31,11 @@ def geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str
         if "candidates" not in json_input.keys() or len(json_input["candidates"]) == 0:
             return []
 
+
+        response = requests.get("https://api64.ipify.org?format=json")
+        public_ip = response.json()["ip"]
+
+        print(f"Your public IP address is: {public_ip}")
    
         # Get candidate with greatest score or if multiple candidates have the same greatest score pick the first occurence where City == "Sacramento"
         # If no occurences of City == "Sacramento", return the first candidate in the list

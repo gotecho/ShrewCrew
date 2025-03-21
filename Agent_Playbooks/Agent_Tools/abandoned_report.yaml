@@ -1,0 +1,49 @@
+openapi: 3.0.1
+info:
+  title: Abandoned Vehicle Reporter
+  description: Obtains information to file a case for an abandoned vehicle
+  version: 1.0.0
+servers:
+  - url: https://9a5d-2601-204-4380-81b-7e55-3dc9-12c5-b0f0.ngrok-free.app
+paths:
+  /file-abandoned-vehicle:
+    post:
+      summary: Information on the abandoned vehicle to post to SalesForce
+      operationId: vehicleData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                make:
+                  type: string
+                  example: "Honda"
+                model:
+                  type: string
+                  example: "Civic"
+                vehicleColor: 
+                  type: string
+                  example: "blue"
+                licensePlate:
+                  type: string
+                  example: "6LIK274"
+                timePeriod:
+                  type: integer
+                  example: "12"
+                location:
+                  type: string
+                  example: "123 Avenue Street"
+      responses:
+        "200":
+          description: Abandoned vehicle case result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  caseId:
+                    type: string
