@@ -36,6 +36,18 @@ paths:
                 animalTotal:
                   type: integer
                   description: The number of dead animals.
+                firstName:
+                  type: string
+                  nullable: true
+                  example: "Bob"
+                lastName: 
+                  type: string
+                  nullable: true
+                  example: "Doe"
+                phoneNumber:
+                  type: string
+                  nullable: true
+                  example: "235-895-9844"
       responses:
         '200':
           description: Successfully made new dead animal case. 

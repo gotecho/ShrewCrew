@@ -209,22 +209,18 @@ def deadAnimal():
             chamActivitySubType = "DEAD PP"
             chamPriority = 4
 
-        
+        firstName = data.get("firstName")
+        lastName = data.get("lastName")
+        phoneNumber = data.get("phoneNumber")
 
 
         case_data = {
-            "Description" : {
-                "Animal Location": location,
-                "Animal Type": animalType,
-                "Animal Total": animalTotal,
-                "CHAMELEON Activity Type": chamActivityType,
-                "CHAMELEON Activity Sub Type": chamActivitySubType,
-                "CHAMELEON Priority": chamPriority
-
-            }
+            "Description" : f"Animal Location: {location}, Animal Type: {animalType}, Animal Total: {animalTotal}, CHAMELEON Activity Type: {chamActivityType}, CHAMELEON Activity Sub Type: {chamActivitySubType}, CHAMELEON Priority: {chamPriority}, firstName: {firstName}, lastName: {lastName}, phonenumber: {phoneNumber}"
+  
         }
         case_response = requests.post(case_url, headers=headers, json=case_data)
-        return jsonify({"Success": True, "SalesForce Response": case_response.json})
+        case_id = case_response.json().get("id")
+        return jsonify({"Success": True, "Case Id": case_id.json})
     except Exception as error:
         return jsonify({"Success": False, "Error": str(error)}), 500
     
