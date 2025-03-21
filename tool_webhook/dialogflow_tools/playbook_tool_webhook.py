@@ -165,17 +165,20 @@ def abandonedVehicle():
         license = data.get("licensePlate")
         daysAbandoned = data.get("timePeriod")
         location = data.get("location")
+        firstName = data.get("firstName")
+        lastName = data.get("lastName")
+        phoneNumber = data.get("phoneNumber")
 
         case_data = {
-            "Description" : {
-                "Vehicle Make": make,
-                "Vehicle Model": model,
-                "Vehicle Color": color,
-                "License Plate Number": license,
-                "# of Days Abandoned": daysAbandoned,
-                "Location of Vehicle": location
-
-            }
+            "Description": 
+            f"""
+                Vehicle: {color} {make} {model}
+                License Plate: {license}
+                Location: {location}
+                Number of Days Abandoned: {daysAbandoned}
+                Full Name (If Given): {firstName} {lastName}
+                Phone Number (If Given): {phoneNumber}                
+            """
         }
 
         case_response = requests.post(case_url, headers=headers, json=case_data)
