@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify
 import requests
-import arcgis_helpers as a
+import dialogflow_tools.arcgis_helpers as a
 import sys
 import os
 from dotenv import load_dotenv
 import traceback
 import logging
+from dialogflow_tools.scraper import scrape_city_data
 
 app = Flask(__name__)
 
@@ -226,6 +227,31 @@ def deadAnimal():
         return jsonify({"Success": True, "SalesForce Response": case_response.json})
     except Exception as error:
         return jsonify({"Success": False, "Error": str(error)}), 500
+    
+    
+@app.route("/311-data", methods=["POST"])
+def scrape_and_return_data():
+    try:
+        user_query = request.json.get('userQuery', '')
+        
+        if not user_query:
+            return jsonify({
+                "success": False,
+                "error": "Missing 'userQuery' in the request body"
+            }), 400
+        
+        # Scrape data based on the query
+        data = scrape_city_data(user_query)
+
+        return jsonify(data), 200
+
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+        return jsonify({
+            "success": False,
+            "error": "Failed to scrape data",
+            "details": str(e)
+        }), 500
 
 
 
