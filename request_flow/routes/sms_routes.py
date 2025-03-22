@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
 from request_flow.services.dialogflow_service import detect_intent_text
+from request_flow.services.firestore_service import log_message
 
 sms_bp = Blueprint('sms_bp', __name__)
 
@@ -17,7 +18,13 @@ def sms_reply():
     if not incoming_msg:
         return jsonify({"error": "NO SMS RECEIVED"}), 400
     
+    # log inbound SMS
+    log_message(sender_number, incoming_msg, direction="inbound")
+    
     response_msg = process_request(sender_number, incoming_msg)
+
+    # log AI response
+    log_message(sender_number, response_msg, direction="outbound")
 
     # set up Twilio
     twilio_resp = MessagingResponse()
