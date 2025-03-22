@@ -1,6 +1,6 @@
-import requests
 from flask import Blueprint, request, jsonify
 from request_flow.services.firestore_service import get_latest_request, save_request
+from request_flow.services.salesforce_service import create_service_request, get_case_status
 
 webhook_bp = Blueprint('webhook_bp', __name__)
 
@@ -10,7 +10,8 @@ SALESFORCE_URL = ""
 ACCESS_TOKEN = ""
 
 """
-Check Firestore if request/conversation is new or existing
+Dialogflow CX webhook that checks Firestore and Salesforce 
+to either look up a case status or start a new one
 """
 @webhook_bp.route('/webhook/dialogflow', methods=['POST'])
 def dialogflow_webhook():
@@ -19,60 +20,42 @@ def dialogflow_webhook():
     issue_description = req["sessionInfo"]["parameters"].get("issue_description", "No details provided")
 
     if not case_id:
-        return jsonify({"fulfillmentResonse": {"messages": [{"text": {"text": ["Missing Case ID."]}}]}})
+        return jsonify({
+            "fulfillmentResponse": {
+                "messages": [{
+                    "text": {"text": ["Missing Case ID."]}
+                }]
+            }
+        })
     
-    # Check for existing case ID
+    # Check for existing case ID in Firestore
     active_request = get_latest_request(case_id)
 
     if active_request:
-        response_msg = get_case_status(case_id)
-    else:
-        # Call to SalesForce which creates a new case ID
-        case_id = create_new_case(issue_description)
-        if case_id:
-            # Store SF's newly generated case ID in Firestore 
-            save_request(case_id, issue_description)
-            response_msg = f"""Your service request has been created.\n 
-                           Case ID: {case_id}\nReply with 'CASE {case_id}' 
-                           for updates."""
+        # Get status from SalesForce
+        case_data = get_case_status(case_id)
+        if "error" not in case_data:
+            response_msg = f"Case {case_id} Status: {case_data['status']}\nDetails: {case_data['description']}"
         else:
-            response_msg = "There was an issue submitting your request. Please try again."
+            response_msg = "Case ID not found."
+    else:
+        # SalesForce creates new case ID
+        sf_response = create_service_request(issue_description)
+        if sf_response.get("case_id"):
+            case_id = sf_response["case_id"]
+            save_request(case_id, issue_description)
+            response_msg = (
+                f"Your service request has been created.\n"
+                f"Case ID: {case_id}\n"
+                f"Reply with 'CASE {case_id}' for updates."
+            )
+        else:
+            response_msg = "Unable to submit request. Please try again."
     
-    return jsonify({"fulfillmentResponse": {"messages": [{"text": {"text": [response_msg]}}]}})
-
-
-# Search sf for the status of an existing case ID
-def get_case_status(case_id):
-    headers = {"Authorization": f"Bearer {ACCESS_TOKEN}", "Content-Type": "application/json"}
-
-    response = requests.get(f"{SALESFORCE_URL}/{case_id}", headers=headers)
-
-    if response.status_code == 200:
-        case_data = response.json()
-        status = case_data.get("Status", "Unknown")
-        details = case_data.get("Description", "No details available.")
-        return f"Case {case_id} Status: {status}\nDetails: {details}"
-    return "Invalid Case ID or case not found."
-
-
-# Use sf to create a new case and get the case ID
-def create_new_case(description):
-    new_case = {
-        "Subject": "New 311 Request",
-        "Description": description,
-        "Status": "New",
-    }
-
-    headers = {
-        "Authorization": f"Bearer {ACCESS_TOKEN}",
-        "Content-Type": "application/json"
-    }
-    # POST request to sf
-    response = requests.post(SALESFORCE_URL, json=new_case, headers=headers)
-
-    if response.status_code != 201:
-        print(f"Error: {response.status_code} - {response.text}")
-        return None
-    elif response.status_code == 201:
-        # returns the case ID
-        return response.json().get("id")
+    return jsonify({
+        "fulfillmentResponse": {
+            "messages": [{
+                "text": {"text": [response_msg]}
+            }]
+        }
+    })
