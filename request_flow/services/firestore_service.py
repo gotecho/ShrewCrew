@@ -62,3 +62,16 @@ def delete_request(case_id):
         logging.info(f"Deleted request for case_id {case_id}")
     except Exception as e:
         logging.error(f"Error deleting request for case_id {case_id}: {e}")
+
+
+# Implement Firestore conversation logs
+def log_message(user, message, direction="inbound"):
+    try:
+        doc_ref = database.collection("conversations").document(user)
+        doc_ref.collection("messages").add({
+            "message": message,
+            "direction": direction,
+            "timestamp": datetime.datetime.utcnow()
+        })
+    except Exception as e:
+        logging.error(f"Error logging message for user {user}: {e}")
