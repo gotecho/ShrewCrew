@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify
 import requests
-import dialogflow_tools.arcgis_helpers as a
+import arcgis_helpers as a
 import sys
 import os
 from dotenv import load_dotenv
 import traceback
 import logging
-from dialogflow_tools.scraper import scrape_city_data
+from scraper import scrape_city_data
 
 app = Flask(__name__)
 
@@ -184,7 +184,7 @@ def abandonedVehicle():
         case_response = requests.post(case_url, headers=headers, json=case_data)
         case_id = case_response.json().get("id")
 
-        return jsonify({"Success": True, "Case Id": case_id})
+        return jsonify({"Success": True, "Case Id": case_id}), 200
     
     except Exception as error:
         return jsonify({"Success": False, "Error": str(error)}), 500
