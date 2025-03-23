@@ -40,27 +40,6 @@ def getToken():
         raise Exception(f"Failed to get access token from SalesForce: {response_data}")
 
 
-@app.route("/validate-address", methods=["POST"])
-def validate():
-    data = request.get_json()
-    address = data.get("address", "").strip()
-    cross_street = data.get("cross_street", "").strip()
-
-    if not address and not cross_street:
-        return jsonify({"valid": False, "message": "No address or street provided"}), 400
-
-    if cross_street:
-        # Construct full address using cross street
-        full_address = f"{address} & {cross_street}, {'Sacramento'}"
-    elif address and " " not in address:
-        # If only a street name is given, add the default city
-        full_address = f"{address}, {'Sacramento'}"
-    else:
-        full_address = address
-
-    is_valid, message = a.geocode(full_address)
-    return jsonify({"valid": is_valid, "message": message})
-
 @app.route("/generic-case-post", methods=["POST"])
 def push_to_salesforce_generic():
     """
