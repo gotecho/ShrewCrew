@@ -71,10 +71,6 @@ def push_to_salesforce_generic():
         case_url = f"{url}/sobjects/Case"
         # Extract request JSON
         data = request.get_json()
-        response = requests.get("https://api64.ipify.org?format=json")
-        public_ip = response.json()["ip"]
-
-        print(f"Your public IP address is: {public_ip}")
 
         # Extract fields from request body
         first_name = str(data.get("firstName", "")).strip()
@@ -103,7 +99,7 @@ def push_to_salesforce_generic():
             "Description": description,
             "Origin": "Web",
             "Priority": "Medium",
-            "ContactMobile": None if is_anonymous else phone,
+            "SuppliedPhone": None if is_anonymous else phone,
         }
 
         # Add geocoded address fields if available
@@ -149,45 +145,6 @@ def push_to_salesforce_generic():
     except Exception as e:
         print(traceback.format_exc())
         return jsonify({"success": False, "error": "Server error", "details": str(e)}), 500
-    
-
-@app.route('/file-abandoned-vehicle', methods=['POST'])
-def abandonedVehicle():
-    try:
-        token = getToken() 
-        case_url = f"{url}/sobjects/Case"
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json",}
-
-        data = request.get_json()
-        make = data.get("make")
-        model = data.get("model")
-        color = data.get("vehicleColor")
-        license = data.get("licensePlate")
-        daysAbandoned = data.get("timePeriod")
-        location = data.get("location")
-        firstName = data.get("firstName")
-        lastName = data.get("lastName")
-        phoneNumber = data.get("phoneNumber")
-
-        case_data = {
-            "Description": 
-            f"""
-                Vehicle: {color} {make} {model}
-                License Plate: {license}
-                Location: {location}
-                Number of Days Abandoned: {daysAbandoned}
-                Full Name (If Given): {firstName} {lastName}
-                Phone Number (If Given): {phoneNumber}                
-            """
-        }
-
-        case_response = requests.post(case_url, headers=headers, json=case_data)
-        case_id = case_response.json().get("id")
-
-        return jsonify({"Success": True, "Case Id": case_id}), 200
-    
-    except Exception as error:
-        return jsonify({"Success": False, "Error": str(error)}), 500
 
 
 @app.route('/dead_animal', methods=['POST'])

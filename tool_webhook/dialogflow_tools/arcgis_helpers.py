@@ -32,10 +32,6 @@ def geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str
             return []
 
 
-        response = requests.get("https://api64.ipify.org?format=json")
-        public_ip = response.json()["ip"]
-
-        print(f"Your public IP address is: {public_ip}")
    
         # Get candidate with greatest score or if multiple candidates have the same greatest score pick the first occurence where City == "Sacramento"
         # If no occurences of City == "Sacramento", return the first candidate in the list
@@ -66,7 +62,7 @@ def geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str
     params = {
         "SingleLine": original_address,
         "outFields": "*",
-        "f": "pjson",
+        "f": "json",
         "maxLocations": 10,
     }
 
@@ -100,7 +96,7 @@ def geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str
         county = world_candidate["candidates"][0]["attributes"]["Subregion"]
         zip_code = world_candidate["candidates"][0]["attributes"]["Postal"]
 
-        city_geocoder_url = (os.getenv("EXTERNAL_GIS_URL") + "ADDRESS_AND_STREETS/GeocodeServer/findAddressCandidates?")
+        city_geocoder_url = ("https://devgis311.cityofsacramento.org/arcgis/rest/services/ADDRESS_AND_STREETS/GeocodeServer/findAddressCandidates?")
         params = {
             "Street": street,
             "City": city,
@@ -109,19 +105,16 @@ def geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str
             "outFields": "*",
             "outSR": "4326",
             "maxLocations": 10,
-            "f": "pjson",
+            "f": "json",
         }
 
         start = datetime.now()
 
         city_response = requests.get(url=city_geocoder_url, params=params)
-        print(f"Response Status Code: {city_response.status_code}")
-        print(f"Response Headers: {city_response.headers}")
-        print(f"Response Text: {city_response.text}")
         
         duration = round((datetime.now() - start).microseconds / 1000)
         
-        body = city_response.get_json()
+        body = city_response.json()
         
         if ("candidates" in body and len(body["candidates"]) > 0):
             internal_candidate = _find_candidate(json_input=body, threshold=threshold)
@@ -129,7 +122,7 @@ def geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str
         overview = {"address": address, "city": city, "county": county}
 
     else:
-        city_geocoder_url = (os.getenv("EXTERNAL_GIS_URL") + "ADDRESS_AND_STREETS/GeocodeServer/findAddressCandidates?")
+        city_geocoder_url = ("https://devgis311.cityofsacramento.org/arcgis/rest/services/" + "ADDRESS_AND_STREETS/GeocodeServer/findAddressCandidates?")
         params = {
             "SingleLine": address,
             "outFields": "*",
@@ -163,8 +156,5 @@ if __name__ == "__main__":
     for address in addresses:
         result = geocode(address)
         print(f"Address: {address}")
-        if result['address_data'] is None:
-            print("No valid address found.")
-        else:
-            print(f"Is Sacramento: {result['is_sacramento']}")
-            print(f"Matched Address: {result['address_data']}")
+        if result:
+            print(str(result))
