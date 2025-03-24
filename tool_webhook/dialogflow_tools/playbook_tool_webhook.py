@@ -195,15 +195,16 @@ def deadAnimal():
 
         data = request.get_json()
 
+        locationType = data.get("locationType")
         location = data.get("location")
         animalType = data.get("animalType")
         animalTotal = data.get("animalTotal")
 
-        if location == "Right of Way": 
+        if locationType == "Right of Way": 
             chamActivityType = "DEAD ST"
             chamActivitySubType = "DEAD ST"
             chamPriority = 4
-        elif location == "Private Property":
+        elif locationType == "Private Property":
             chamActivityType = "DEAD PP"
             chamActivitySubType = "DEAD PP"
             chamPriority = 4
@@ -211,16 +212,41 @@ def deadAnimal():
         firstName = data.get("firstName")
         lastName = data.get("lastName")
         phoneNumber = data.get("phoneNumber")
+        addr_resp = a.geocode(location, 90)["internal_geocoder"]
+
+        if len(addr_resp) == 0:
+            return jsonify({"Success": False, "Error": "Address is outside the service area"}), 401  
 
 
         case_data = {
             "Description" : f"Animal Location: {location}, Animal Type: {animalType}, Animal Total: {animalTotal}, CHAMELEON Activity Type: {chamActivityType}, CHAMELEON Activity Sub Type: {chamActivitySubType}, CHAMELEON Priority: {chamPriority}, firstName: {firstName}, lastName: {lastName}, phonenumber: {phoneNumber}"
   
         }
+
+        if addr_resp and "candidates" in addr_resp and addr_resp["candidates"]:
+            candidate = addr_resp["candidates"][0]  
+
+        case_data.update({
+            "Address_Geolocation__Latitude__s": candidate.get("location", {}).get("y"),
+            "Address_Geolocation__Longitude__s": candidate.get("location", {}).get("x"),
+            "Address_X__c": candidate.get("attributes", {}).get("X"),
+            "Address_Y__c": candidate.get("attributes", {}).get("Y"),
+            "Address__c": candidate.get("address"),
+            "GIS_City__c": candidate.get("attributes", {}).get("City"),
+            "Street_Center_Line__c": candidate.get("attributes", {}).get("Loc_name"),
+         })
+
         case_response = requests.post(case_url, headers=headers, json=case_data)
         case_id = case_response.json().get("id")
-        return jsonify({"Success": True, "Case Id": case_id.json})
+
+        if case_response.status_code in (200, 201, 204):
+            print(f"Case Id: {case_id}")
+            return jsonify({"Success": True, "Case Id": case_id}), 200
+        else:
+            return jsonify({"Success": False, "Error": f"Salesforce returned with {case_response.status_code}"}), case_response.status_code
+
     except Exception as error:
+        print(sys.exec_info())
         return jsonify({"Success": False, "Error": str(error)}), 500
     
     

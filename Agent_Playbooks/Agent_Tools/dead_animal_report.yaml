@@ -17,12 +17,15 @@ paths:
             schema:
               type: object
               properties: 
-                location: 
+                locationType: 
                   type: string
                   enum:
                     - Right of Way
                     - Private Property
                   description: Location of dead animal. Must be either "Right of Way" or "Private Property".
+                location:
+                  type: string
+                  example: "123 Avenue Street"
                 animalType:
                   type: string
                   enum: 
