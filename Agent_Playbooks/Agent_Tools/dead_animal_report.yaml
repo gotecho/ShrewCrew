@@ -53,6 +53,15 @@ paths:
                   example: "235-895-9844"
       responses:
         '200':
-          description: Successfully made new dead animal case. 
+          description: Successfully made new dead animal case.
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  caseId:
+                    type: string 
         '400':
           description: Invalid or missing data.
