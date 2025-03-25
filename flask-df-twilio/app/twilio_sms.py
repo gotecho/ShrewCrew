@@ -2,6 +2,7 @@ import os
 from twilio.rest import Client
 from twilio.request_validator import RequestValidator
 from flask import request, abort
+import logging
 
 def verify_twilio_request():
     auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
@@ -17,12 +18,19 @@ def verify_twilio_request():
         abort(403, description="Request not from Twilio.")
 
 def send_sms(to, message):
-    client = Client(os.getenv("TWILIO_ACCOUNT_SID"), os.getenv("TWILIO_AUTH_TOKEN"))
+    try:
+        logging.info('Entering twilio_sms function')
 
-    message = client.messages.create(
-        body=message,
-        from_=os.getenv("TWILIO_PHONE_NUMBER"),
-        to=to
-    )
+        client = Client(os.getenv("TWILIO_ACCOUNT_SID"), os.getenv("TWILIO_AUTH_TOKEN"))
 
-    return message.sid
+        message = client.messages.create(
+            body=message,
+            from_=os.getenv("TWILIO_PHONE_NUMBER"),
+            to=to
+        )
+
+        return message.sid
+
+    except Exception as e:
+        logging.exception('Error in twilio_sms function')
+        raise
