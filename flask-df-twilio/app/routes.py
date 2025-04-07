@@ -2,24 +2,33 @@ from flask import Blueprint, request, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
 from app.dialogflow_cx import detect_intent_text
 from app.twilio_sms import verify_twilio_request
+import logging
 
 main = Blueprint('main', __name__)
 
 @main.route('/sms', methods=['POST'])
 def sms_reply():
-    verify_twilio_request()
     
-    incoming_msg = request.form.get('Body')
-    sender_number = request.form.get('From')
+    verify_twilio_request()
 
-    if not incoming_msg:
-        return jsonify({"error": "No message received"}), 400
+    try:
+        logging.info('Incoming request to sms_reply')
 
-    # Send message to Dialogflow CX
-    dialogflow_response = detect_intent_text(incoming_msg)
+        incoming_msg = request.form.get('Body')
+        sender_number = request.form.get('From')
 
-    # Prepare Twilio response
-    twilio_response = MessagingResponse()
-    twilio_response.message(dialogflow_response)
+        if not incoming_msg:
+            return jsonify({"error": "No message received"}), 400
 
-    return str(twilio_response)
+        session_id = sender_number
+        dialogflow_response = detect_intent_text(incoming_msg, session_id)
+
+        twilio_response = MessagingResponse()
+        twilio_response.message(dialogflow_response)
+
+        logging.info('Successfully processed sms_reply')
+        return str(twilio_response)
+
+    except Exception as e:
+        logging.exception('Error in sms_reply')
+        return "Internal Server Error", 500

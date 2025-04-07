@@ -131,7 +131,7 @@ def abandonedVehicle():
     try:
         token = getToken() 
         case_url = f"{url}/sobjects/Case"
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json",}
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
         data = request.get_json()
         make = data.get("make")
@@ -174,6 +174,8 @@ def abandonedVehicle():
 
         case_response = requests.post(case_url, headers=headers, json=case_data)
         case_id = case_response.json().get("id")
+        print(f"case data: {case_data}")
+        print(f"case response: {case_response}")
 
         if case_response.status_code in (200, 201, 204):
             print(f"Case Id: {case_id}")
@@ -191,7 +193,7 @@ def deadAnimal():
     try:
         token = getToken()
         case_url = f"{url}/sobjects/Case"
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
         data = request.get_json()
 
@@ -219,7 +221,7 @@ def deadAnimal():
 
 
         case_data = {
-            "Description" : f"Animal Location: {location}, Animal Type: {animalType}, Animal Total: {animalTotal}, CHAMELEON Activity Type: {chamActivityType}, CHAMELEON Activity Sub Type: {chamActivitySubType}, CHAMELEON Priority: {chamPriority}, firstName: {firstName}, lastName: {lastName}, phonenumber: {phoneNumber}"
+            "Description" : f" Location Type: {locationType}, Location: {location}, Animal Type: {animalType}, Animal Total: {animalTotal}, CHAMELEON Activity Type: {chamActivityType}, CHAMELEON Activity Sub Type: {chamActivitySubType}, CHAMELEON Priority: {chamPriority}, firstName: {firstName}, lastName: {lastName}, phonenumber: {phoneNumber}"
   
         }
 
@@ -246,7 +248,9 @@ def deadAnimal():
             return jsonify({"Success": False, "Error": f"Salesforce returned with {case_response.status_code}"}), case_response.status_code
 
     except Exception as error:
-        print(sys.exec_info())
+        print(str(case_response))
+        print(sys.exc_info())
+        print(f"Response text: {case_response.json()}")
         return jsonify({"Success": False, "Error": str(error)}), 500
     
     
