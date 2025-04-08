@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 import requests
-import arcgis_helpers as a
+from . import arcgis_helpers as a
 import sys
 import os
 from dotenv import load_dotenv
@@ -56,17 +56,49 @@ def push_to_salesforce_generic():
         last_name = str(data.get("lastName", "")).strip()
         phone = str(data.get("phone", "0")).strip()
         issue_type = str(data.get("issueType", "General Inquiry")).strip()
-        description = str(data.get("description", "")).strip()
-        address = str(data.get("address", "")).strip()
-        addr_resp = a.geocode(address, 90)["internal_geocoder"]
-    
+        description = data.get("description", "")
+        address = data.get("address", "")
 
-        if len(addr_resp) == 0:
+        # Validate required fields
+        required_fields = [first_name, last_name, phone, issue_type, description, address]
+        if not all(required_fields):
             return jsonify({
                 "success": False,
-                "error": "Address is outside the service area",
-                "details": "The provided address is not within the supported region."
-            }), 401  # Return 401 Bad Request out of sacramento
+                "error": "Missing required fields"
+            }), 400
+
+        # Validate input types
+        if not isinstance(first_name, str) or not isinstance(last_name, str):
+            return jsonify({
+                "success": False,
+                "error": "Invalid input type for name fields"
+            }), 400
+
+        if not isinstance(phone, str) or not phone.isdigit() or len(phone) != 10:
+            return jsonify({
+                "success": False,
+                "error": "Invalid phone number"
+            }), 400
+
+        if not isinstance(description, str):
+            return jsonify({
+                "success": False,
+                "error": "Invalid input type for description"
+            }), 400
+
+        if not isinstance(address, str):
+            return jsonify({
+                "success": False,
+                "error": "Invalid input type for address"
+            }), 400
+
+        addr_resp = a.geocode(address, 90)["internal_geocoder"]
+
+        if not addr_resp or not addr_resp.get("candidates"):
+            return jsonify({
+                "success": False,
+                "error": "Address is outside the service area"
+            }), 401
 
         # Determine if the case is anonymous
         is_anonymous = not first_name and not last_name
