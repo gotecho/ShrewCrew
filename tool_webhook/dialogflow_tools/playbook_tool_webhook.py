@@ -280,10 +280,8 @@ def deadAnimal():
             return jsonify({"Success": False, "Error": f"Salesforce returned with {case_response.status_code}"}), case_response.status_code
 
     except Exception as error:
-        print(str(case_response))
         print(sys.exc_info())
-        print(f"Response text: {case_response.json()}")
-        return jsonify({"Success": False, "Error": str(error)}), 500
+        return jsonify({"Success": False, "Error": "Internal Server Error Occurred."}), 500
     
     
 @app.route("/311-data", methods=["POST"])
