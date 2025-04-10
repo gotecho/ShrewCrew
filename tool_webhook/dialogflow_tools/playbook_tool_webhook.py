@@ -217,7 +217,7 @@ def abandonedVehicle():
     
     except Exception as error:
         print(sys.exc_info())
-        return jsonify({"Success": False, "Error": str(error)}), 500
+        return jsonify({"Success": False, "Error": "Internal Server Error Occured"}), 500
 
 
 @app.route('/dead_animal', methods=['POST'])
