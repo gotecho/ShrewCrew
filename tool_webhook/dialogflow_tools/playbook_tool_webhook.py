@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 import traceback
 import logging
-from scraper import scrape_city_data
+from dialogflow_tools.scraper import scrape_city_data
 
 app = Flask(__name__)
 
@@ -297,7 +297,6 @@ def scrape_and_return_data():
                 "error": "Missing 'userQuery' in the request body"
             }), 400
         
-        # Scrape data based on the query
         data = scrape_city_data(user_query)
 
         return jsonify(data), 200
@@ -309,7 +308,6 @@ def scrape_and_return_data():
             "error": "Failed to scrape data",
             "details": str(e)
         }), 500
-
 
 
 if __name__ == "__main__":

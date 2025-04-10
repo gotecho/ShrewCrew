@@ -5,38 +5,70 @@ from urllib.parse import urljoin
 
 app = Flask(__name__)
 
+SOURCE_URLS = [
+    "https://www.cityofsacramento.gov/community-development",
+    "https://www.cityofsacramento.gov/public-works",
+    "https://codelibrary.amlegal.com/codes/sacramentoca/latest/sacramento_ca/0-0-0-1"
+]
+
 def scrape_city_data(user_query, max_results=3):
-    url = "https://www.cityofsacramento.gov/community-development"
-    response = requests.get(url)
+    all_links = []
 
-    if response.status_code != 200:
-        raise Exception(f"Failed to fetch the webpage. Status code: {response.status_code}")
+    # Scrape the data from the specified URLs
+    for url in SOURCE_URLS:
+        try:
+            response = requests.get(url)
+            if response.status_code != 200:
+                print(f"Warning: Failed to fetch {url}")
+                continue
 
-    soup = BeautifulSoup(response.text, 'html.parser')
-    data = []
+            soup = BeautifulSoup(response.text, 'html.parser')
+            for link in soup.find_all('a', href=True):
+                title = link.get_text(strip=True)
+                href = link['href']
+                full_url = urljoin(url, href)
 
-    for link in soup.find_all('a', href=True):
-        title = link.get_text(strip=True)
-        href = link['href']
-        full_url = urljoin(url, href)
+                if not title or 'javascript:void(0);' in href:
+                    continue
 
-        if not title or 'javascript:void(0);' in href:
-            continue
+                all_links.append({"title": title, "url": full_url})
+        except Exception as e:
+            print(f"Error scraping {url}: {e}")
 
-        data.append({"title": title, "url": full_url})
+    # Filter the links based on the user query
+    filtered_data = [
+        link for link in all_links
+        if any(word.lower() in link["title"].lower() for word in user_query.split())
+    ][:max_results]
 
-    filtered_data = []
-    for link in data:
-        if any(word.lower() in link["title"].lower() for word in user_query.split()):
-            filtered_data.append(link)
-
-    # Limit to 3 results only
-    filtered_data = filtered_data[:max_results]
-
-    # Simple JSON response (no listSelect to reduce payload size)
-    formatted_data = {
+    # Build the response as per Google Conversational Agent format
+    response = {
         "fulfillmentText": "Here are some links related to your query:",
-        "links": [{"title": link["title"], "url": link["url"]} for link in filtered_data]
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        "Here are some links related to your query:"
+                    ]
+                }
+            },
+            {
+                "listSelect": {
+                    "title": "Relevant Pages",  # Optional title
+                    "items": [
+                        {
+                            "title": link["title"],
+                            "optionInfo": {
+                                "key": link["url"],
+                                "synonyms": [link["url"]]
+                            }
+                        }
+                        for link in filtered_data
+                    ]
+                }
+            }
+        ]
     }
 
-    return formatted_data
+    # Return the response including both the text message and the listSelect
+    return response
