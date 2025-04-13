@@ -4,7 +4,7 @@ info:
   description: Obtains information to file a case for an abandoned vehicle
   version: 1.0.0
 servers:
-  - url: https://9a5d-2601-204-4380-81b-7e55-3dc9-12c5-b0f0.ngrok-free.app
+  - url: https://da77-130-86-76-140.ngrok-free.app
 paths:
   /file-abandoned-vehicle:
     post:
@@ -35,9 +35,21 @@ paths:
                 location:
                   type: string
                   example: "123 Avenue Street"
+                firstName: 
+                  type: string
+                  nullable: true
+                  example: "John"
+                lastName:
+                  type: string
+                  nullable: true
+                  example: "Doe"
+                phoneNumber:
+                  type: string
+                  nullable: true
+                  example: "123-456-7890"
       responses:
         "200":
-          description: Abandoned vehicle case result
+          description: Abandoned vehicle case successfully posted to Salesforce
           content:
             application/json:
               schema:
@@ -47,3 +59,28 @@ paths:
                     type: boolean
                   caseId:
                     type: string
+        "401":
+          description: Abandoned vehicle case unsuccessful, address is outside of Sacramento area
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error: 
+                    type: string
+        "500":
+          description: Abandoned vehicle case unsuccessful, server error occurred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  success:
+                    type: boolean
+                  error: 
+                    type: string
+        
+
+        

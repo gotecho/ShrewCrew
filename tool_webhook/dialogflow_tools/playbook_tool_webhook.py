@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify
 import requests
-from . import arcgis_helpers as a
+import arcgis_helpers as a
 import sys
 import os
 from dotenv import load_dotenv
 import traceback
 import logging
-from dialogflow_tools.scraper import scrape_city_data
+from scraper import scrape_city_data
 
 app = Flask(__name__)
 
@@ -178,7 +178,7 @@ def abandonedVehicle():
         addr_resp = a.geocode(location, 90)["internal_geocoder"]
 
         if len(addr_resp) == 0:
-            return jsonify({"Success": False, "Error": "Address is outside the service area"}), 401  
+            return jsonify({"success": False, "error": "Address is outside the service area"}), 401  
 
         case_data = {
             "Description": 
@@ -211,13 +211,13 @@ def abandonedVehicle():
 
         if case_response.status_code in (200, 201, 204):
             print(f"Case Id: {case_id}")
-            return jsonify({"Success": True, "Case Id": case_id}), 200
+            return jsonify({"success": True, "caseId": case_id}), 200
         else:
-            return jsonify({"Success": False, "Error": f"Salesforce returned with {case_response.status_code}"}), case_response.status_code
+            return jsonify({"success": False, "error": f"Salesforce returned with {case_response.status_code}"}), case_response.status_code
     
     except Exception as error:
         print(sys.exc_info())
-        return jsonify({"Success": False, "Error": "Internal Server Error Occured"}), 500
+        return jsonify({"success": False, "error": "Internal Server Error Occured"}), 500
 
 
 @app.route('/dead_animal', methods=['POST'])
