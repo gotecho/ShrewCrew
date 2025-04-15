@@ -68,7 +68,7 @@ def geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str
 
     start = datetime.now()
 
-    world_response = requests.get(url, params=params)
+    world_response = requests.get(url, params=params, timeout=10)
 
     duration = round((datetime.now() - start).microseconds / 1000)
 
@@ -110,7 +110,7 @@ def geocode(address: str, threshold=80, salesforce_case_object=None) -> dict[str
 
         start = datetime.now()
 
-        city_response = requests.get(url=city_geocoder_url, params=params)
+        city_response = requests.get(url=city_geocoder_url, params=params, timeout=10)
         
         duration = round((datetime.now() - start).microseconds / 1000)
         

@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify
 import requests
-import arcgis_helpers as a
+from dialogflow_tools import arcgis_helpers as a
 import sys
 import os
 from dotenv import load_dotenv
 import traceback
 import logging
-from scraper import scrape_city_data
+from dialogflow_tools import scraper
 
 app = Flask(__name__)
 
@@ -23,6 +23,14 @@ url = os.getenv("SALESFORCE_URL")
 
 
 def getToken():
+    """ Function to regenerate and validate a new Salesforce token
+
+    Raises:
+        Exception: If the authentication for Salesforce fails, exception raised.
+
+    Returns:
+        String: String token for Salesforce authentication.
+    """
     authenticate = {
         "grant_type": grant_type,
         "client_id": client_id,
@@ -42,8 +50,11 @@ def getToken():
 
 @app.route("/generic-case-post", methods=["POST"])
 def push_to_salesforce_generic():
-    """
-    Receives case data from Dialogflow CX and pushes it to Salesforce.
+    """ Function to take information from the DialogflowCX conversational agent and post it into Salesforce.
+
+    Returns:
+        JSON: Json containing a string to represent success or failure, and another string to
+                represent the Salesforce ticket number.
     """
     try:
         token = getToken() 
@@ -142,9 +153,10 @@ def push_to_salesforce_generic():
 
         # Check response status
         if response.status_code in (200, 201, 204):
+            case_id = response.json().get("id")
             return jsonify({
                 "success": True,
-                "salesforce_response": response.json()
+                "salesforce_response": case_id
             }), 200
         else:
             return jsonify({
@@ -160,6 +172,13 @@ def push_to_salesforce_generic():
 
 @app.route('/file-abandoned-vehicle', methods=['POST'])
 def abandonedVehicle():
+    """ Path used to file the case specific information gathered from Dialogflow CX about an abandoned
+        vehicle.
+
+    Returns:
+        JSON: Json containing a string to represent success or failure, and another string to
+                represent the Salesforce ticket number.
+    """    
     try:
         token = getToken() 
         case_url = f"{url}/sobjects/Case"
@@ -202,7 +221,7 @@ def abandonedVehicle():
             "Address__c": candidate.get("address"),
             "GIS_City__c": candidate.get("attributes", {}).get("City"),
             "Street_Center_Line__c": candidate.get("attributes", {}).get("Loc_name"),
-         })
+            })
 
         case_response = requests.post(case_url, headers=headers, json=case_data)
         case_id = case_response.json().get("id")
@@ -222,6 +241,13 @@ def abandonedVehicle():
 
 @app.route('/dead_animal', methods=['POST'])
 def deadAnimal():
+    """ Path used to file the case specific information gathered from Dialogflow CX about a
+        dead animal.
+
+    Returns:
+        JSON: Json containing a string to represent success or failure, and another string to
+                represent the Salesforce ticket number.
+    """
     try:
         token = getToken()
         case_url = f"{url}/sobjects/Case"
@@ -254,7 +280,7 @@ def deadAnimal():
 
         case_data = {
             "Description" : f" Location Type: {locationType}, Location: {location}, Animal Type: {animalType}, Animal Total: {animalTotal}, CHAMELEON Activity Type: {chamActivityType}, CHAMELEON Activity Sub Type: {chamActivitySubType}, CHAMELEON Priority: {chamPriority}, firstName: {firstName}, lastName: {lastName}, phonenumber: {phoneNumber}"
-  
+    
         }
 
         if addr_resp and "candidates" in addr_resp and addr_resp["candidates"]:
@@ -268,7 +294,7 @@ def deadAnimal():
             "Address__c": candidate.get("address"),
             "GIS_City__c": candidate.get("attributes", {}).get("City"),
             "Street_Center_Line__c": candidate.get("attributes", {}).get("Loc_name"),
-         })
+            })
 
         case_response = requests.post(case_url, headers=headers, json=case_data)
         case_id = case_response.json().get("id")
@@ -286,6 +312,13 @@ def deadAnimal():
     
 @app.route("/311-data", methods=["POST"])
 def scrape_and_return_data():
+    """ Takes the user query from Dialogflow CX and scrapes the websites for
+        the City of Sacramento's services and returns the useful information.
+
+    Returns:
+        JSON: Returns a JSON containing the scraped information from the
+              311 services links pertaining to the user. Or error if failed.
+    """
     try:
         user_query = request.json.get('userQuery', '')
         
