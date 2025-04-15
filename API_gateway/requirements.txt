@@ -1,0 +1,6 @@
+
+Flask
+twilio
+requests
+google-auth
+python-dotenv
