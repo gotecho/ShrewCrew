@@ -63,5 +63,25 @@ paths:
                     type: boolean
                   caseId:
                     type: string 
-        '400':
-          description: Invalid or missing data.
+        '401':
+          description: Dead animal case unsuccessful, address is outside of Sacramento area.
+          content: 
+            applicaton/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+        '500':
+          description: Dead animal case unsuccessful, server error occurred. 
+          content:
+            applicaton/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string

@@ -5,13 +5,13 @@ import sys
 import os
 from dotenv import load_dotenv
 import traceback
-import logging
 from dialogflow_tools import scraper
+import urllib.parse as urlp
+
 
 app = Flask(__name__)
 
 load_dotenv()
-
 
 auth_url = os.getenv("SALESFORCE_AUTH_URL")
 client_id = os.getenv("SALESFORCE_CLIENT_ID")
@@ -20,6 +20,31 @@ username = os.getenv("SALESFORCE_USERNAME")
 password = os.getenv("SALESFORCE_PASSWORD")
 grant_type = "password"
 url = os.getenv("SALESFORCE_URL")
+
+
+def get_service_type_id(service_name, token):
+    """Fetch the Service_Type__c ID from Salesforce based on a partial name match."""
+    query = urlp.quote_plus(
+        f"SELECT Id FROM Service_Type__c WHERE Name LIKE '%{service_name}%' LIMIT 1"
+    )
+
+    response = requests.get(
+        url=f"{url}/query/?q={query}",
+        headers={"Authorization": f"Bearer {token}"}
+    )
+
+    if response.status_code == 200:
+        records = response.json().get("records", [])
+        if records:
+            return records[0]["Id"]
+        else:
+            print("No matching service type found.")
+            return None
+    else:
+        print("Salesforce query failed:", response.status_code, response.text)
+        return None
+
+
 
 
 def getToken():
@@ -224,6 +249,7 @@ def abandonedVehicle():
             })
 
         case_response = requests.post(case_url, headers=headers, json=case_data)
+        print("Salesforce response JSON:", case_response.json(), flush=True)
         case_id = case_response.json().get("id")
         print(f"case data: {case_data}")
         print(f"case response: {case_response}")
@@ -248,12 +274,17 @@ def deadAnimal():
         JSON: Json containing a string to represent success or failure, and another string to
                 represent the Salesforce ticket number.
     """
+     
     try:
         token = getToken()
         case_url = f"{url}/sobjects/Case"
         headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
         data = request.get_json()
+        if not data:
+            return jsonify({"success": False, "error": "Missing or invalid JSON body"}), 400
+        
+        
 
         locationType = data.get("locationType")
         location = data.get("location")
@@ -272,15 +303,27 @@ def deadAnimal():
         firstName = data.get("firstName")
         lastName = data.get("lastName")
         phoneNumber = data.get("phoneNumber")
+        
+
         addr_resp = a.geocode(location, 90)["internal_geocoder"]
 
         if len(addr_resp) == 0:
-            return jsonify({"Success": False, "Error": "Address is outside the service area"}), 401  
-
+            return jsonify({"success": False, "error": "Address is outside the service area"}), 401  
 
         case_data = {
-            "Description" : f" Location Type: {locationType}, Location: {location}, Animal Type: {animalType}, Animal Total: {animalTotal}, CHAMELEON Activity Type: {chamActivityType}, CHAMELEON Activity Sub Type: {chamActivitySubType}, CHAMELEON Priority: {chamPriority}, firstName: {firstName}, lastName: {lastName}, phonenumber: {phoneNumber}"
-    
+            "Description" : 
+            f""" 
+                Location Type: {locationType}
+                Location: {location}
+                Animal Type: {animalType}
+                Animal Total: {animalTotal}
+                CHAMELEON Activity Type: {chamActivityType}
+                CHAMELEON Activity Sub Type: {chamActivitySubType}
+                CHAMELEON Priority: {chamPriority}
+                firstName: {firstName}
+                lastName: {lastName}
+                phonenumber: {phoneNumber}
+            """
         }
 
         if addr_resp and "candidates" in addr_resp and addr_resp["candidates"]:
@@ -294,21 +337,43 @@ def deadAnimal():
             "Address__c": candidate.get("address"),
             "GIS_City__c": candidate.get("attributes", {}).get("City"),
             "Street_Center_Line__c": candidate.get("attributes", {}).get("Loc_name"),
-            })
+         })
 
+
+        print("Case data to Salesforce:", case_data)
+
+        service_type_id = get_service_type_id("Dead", token)
+        print(f"Fetched Service Type ID: {service_type_id}")  # Log ID value
+        if service_type_id:
+             case_data.update({
+                "Service_Type__c": service_type_id  
+            })
+        else:
+            print(traceback.format_exc())
+            return jsonify({"Success": False, "Error": "Could not fetch Service Type ID"}), 400
+           
+
+
+        
         case_response = requests.post(case_url, headers=headers, json=case_data)
-        case_id = case_response.json().get("id")
+        print(f"Salesforce response status: {case_response.status_code}")
+        print(f"Salesforce response body: {case_response.text}")
+        
 
         if case_response.status_code in (200, 201, 204):
+            case_id = case_response.json().get("id")
             print(f"Case Id: {case_id}")
-            return jsonify({"Success": True, "Case Id": case_id}), 200
+            return jsonify({"success": True, "caseId": case_id}), 200
         else:
-            return jsonify({"Success": False, "Error": f"Salesforce returned with {case_response.status_code}"}), case_response.status_code
+            print("Exception occurred:")
+            print(f"Status Code: {case_response.status_code}, Response: {case_response.text}")
+            return jsonify({"success": False, "error": f"Salesforce returned with {case_response.status_code}"}), case_response.status_code
 
-    except Exception as error:
-        print(sys.exc_info())
-        return jsonify({"Success": False, "Error": "Internal Server Error Occurred."}), 500
-    
+    except Exception as e:
+        print("Exception occurred:")
+        print(traceback.format_exc())  # This shows the actual line that failed
+        return jsonify({"success": False, "error": "Internal Server Error Occurred.", "details": str(e)}), 500
+
     
 @app.route("/311-data", methods=["POST"])
 def scrape_and_return_data():
@@ -328,7 +393,7 @@ def scrape_and_return_data():
                 "error": "Missing 'userQuery' in the request body"
             }), 400
         
-        data = scrape_city_data(user_query)
+        data = scraper.scrape_city_data(user_query)
 
         return jsonify(data), 200
 
