@@ -5,11 +5,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Firestore Database Setup
-database = firestore.Client()
+database = firestore.Client(database="shrewcrew-database")
 
 class Config:
     DEBUG = os.getenv("DEBUG", "False").lower() == "true"
     SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
+    GOOGLE_LOCATION = os.getenv("GOOGLE_LOCATION", "us-central1")
 
 class SalesforceConfig:
     USERNAME = os.getenv("SALESFORCE_USERNAME")
@@ -23,8 +24,7 @@ class TwilioConfig:
     PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER") 
 
 class DialogflowConfig:
-    PROJECT_ID = os.getenv("GOOGLE_PROJECT_ID")
+    PROJECT_ID = os.getenv("PROJECT_ID")
     LOCATION = os.getenv("GOOGLE_LOCATION")
-    AGENT_ID = os.getenv("GOOGLE_AGENT_ID")
-    CREDENTIALS_PATH = os.getenv("GOOGLE_CREDENTIALS_PATH")
+    GOOGLE_AGENT_ID = os.getenv("GOOGLE_AGENT_ID")
     API_ENDPOINT = f"{LOCATION}-dialogflow.googleapis.com"
