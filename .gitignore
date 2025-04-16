@@ -2,5 +2,3 @@
 venv/
 .env
 dialogflow-integrations/
-test_routes_integration.py
-live_test_dialogflow_connection.py
