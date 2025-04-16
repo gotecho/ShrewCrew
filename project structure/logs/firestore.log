@@ -1,0 +1,244 @@
+2025-04-10 16:39:37,438 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-10 16:48:55,138 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-10 16:50:44,424 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-10 17:03:00,069 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-10 17:03:28,009 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-10 17:03:28,187 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-10 17:03:28,187 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-10 17:03:28,194 - INFO -  * Restarting with stat
+2025-04-10 17:03:34,251 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-10 17:03:34,293 - WARNING -  * Debugger is active!
+2025-04-10 17:03:34,302 - INFO -  * Debugger PIN: 843-722-838
+2025-04-10 17:04:58,408 - INFO - 127.0.0.1 - - [10/Apr/2025 17:04:58] "[33mGET / HTTP/1.1[0m" 404 -
+2025-04-10 17:04:58,460 - INFO - 127.0.0.1 - - [10/Apr/2025 17:04:58] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-10 17:05:10,094 - INFO - 127.0.0.1 - - [10/Apr/2025 17:05:10] "GET /overview HTTP/1.1" 200 -
+2025-04-11 21:56:26,066 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-11 21:56:26,153 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-11 21:56:26,153 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-11 21:56:26,157 - INFO -  * Restarting with stat
+2025-04-11 21:56:32,036 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-11 21:56:32,072 - WARNING -  * Debugger is active!
+2025-04-11 21:56:32,085 - INFO -  * Debugger PIN: 843-722-838
+2025-04-11 22:00:22,947 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-11 22:00:23,001 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-11 22:00:23,001 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-11 22:00:23,004 - INFO -  * Restarting with stat
+2025-04-11 22:00:28,994 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-11 22:00:29,028 - WARNING -  * Debugger is active!
+2025-04-11 22:00:29,039 - INFO -  * Debugger PIN: 843-722-838
+2025-04-12 22:44:27,609 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-12 22:52:43,986 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-12 22:55:48,148 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-12 23:04:18,993 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:15:10,609 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:16:14,106 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:17:53,018 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:17:53,023 - INFO - Entering dialogflow_cx function
+2025-04-13 07:17:53,023 - ERROR - Error in dialogflow_cx function
+Traceback (most recent call last):
+  File "C:\ShrewCrew\project structure\request_flow\services\dialogflow_service.py", line 22, in detect_intent_text
+    Config.GOOGLE_PROJECT_ID,
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Config' has no attribute 'GOOGLE_PROJECT_ID'
+2025-04-13 07:21:10,275 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:21:10,279 - INFO - Entering dialogflow_cx function
+2025-04-13 07:21:10,279 - ERROR - Error in dialogflow_cx function
+Traceback (most recent call last):
+  File "C:\ShrewCrew\project structure\request_flow\services\dialogflow_service.py", line 24, in detect_intent_text
+    Config.GOOGLE_AGENT_ID,
+    ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Config' has no attribute 'GOOGLE_AGENT_ID'
+2025-04-13 07:33:41,620 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:33:41,624 - INFO - Entering dialogflow_cx function
+2025-04-13 07:33:41,624 - ERROR - Error in dialogflow_cx function
+Traceback (most recent call last):
+  File "C:\ShrewCrew\project structure\request_flow\services\dialogflow_service.py", line 24, in detect_intent_text
+    DialogflowConfig.GOOGLE_AGENT_ID,
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'DialogflowConfig' has no attribute 'GOOGLE_AGENT_ID'
+2025-04-13 07:34:10,665 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:34:10,670 - INFO - Entering dialogflow_cx function
+2025-04-13 07:34:11,051 - ERROR - Error in dialogflow_cx function
+Traceback (most recent call last):
+  File "C:\ShrewCrew\project structure\request_flow\services\dialogflow_service.py", line 36, in detect_intent_text
+    response = client.detect_intent(request=request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\utami\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\cloud\dialogflowcx_v3\services\sessions\client.py", line 1024, in detect_intent
+    response = rpc(
+               ^^^^
+  File "C:\Users\utami\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\utami\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py", line 293, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "C:\Users\utami\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py", line 153, in retry_target
+    _retry_error_helper(
+  File "C:\Users\utami\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_base.py", line 212, in _retry_error_helper
+    raise final_exc from source_exc
+  File "C:\Users\utami\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py", line 144, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "C:\Users\utami\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\timeout.py", line 120, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\utami\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\grpc_helpers.py", line 78, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.PermissionDenied: 403 IAM permission 'dialogflow.sessions.detectIntent' on 'projects/913161205674/locations/us-central1/agents/04ad4e50-2d51-45fb-a45a-389b46eb771b' denied.
+2025-04-13 07:55:08,242 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:55:08,326 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-13 07:55:08,326 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-13 07:55:08,330 - INFO -  * Restarting with stat
+2025-04-13 07:55:14,523 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:55:14,559 - WARNING -  * Debugger is active!
+2025-04-13 07:55:14,569 - INFO -  * Debugger PIN: 843-722-838
+2025-04-13 07:56:37,137 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:56:37,190 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-13 07:56:37,190 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-13 07:56:37,192 - INFO -  * Restarting with stat
+2025-04-13 07:56:43,124 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-13 07:56:43,159 - WARNING -  * Debugger is active!
+2025-04-13 07:56:43,172 - INFO -  * Debugger PIN: 843-722-838
+2025-04-14 00:39:59,888 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 00:39:59,968 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-14 00:39:59,968 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-14 00:39:59,972 - INFO -  * Restarting with stat
+2025-04-14 00:40:05,730 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 00:40:05,757 - WARNING -  * Debugger is active!
+2025-04-14 00:40:05,767 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 00:45:55,788 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 00:45:55,843 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-14 00:45:55,843 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-14 00:45:55,845 - INFO -  * Restarting with stat
+2025-04-14 00:46:02,038 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 00:46:02,079 - WARNING -  * Debugger is active!
+2025-04-14 00:46:02,092 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 00:46:44,138 - INFO - 127.0.0.1 - - [14/Apr/2025 00:46:44] "[33mGET /test-firestore HTTP/1.1[0m" 404 -
+2025-04-14 00:47:08,049 - INFO - 127.0.0.1 - - [14/Apr/2025 00:47:08] "[33mGET /test-firestore HTTP/1.1[0m" 404 -
+2025-04-14 00:47:08,104 - INFO - 127.0.0.1 - - [14/Apr/2025 00:47:08] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-14 00:51:59,274 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 00:51:59,340 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-14 00:51:59,340 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-14 00:51:59,342 - INFO -  * Restarting with stat
+2025-04-14 00:52:05,175 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 00:52:05,205 - WARNING -  * Debugger is active!
+2025-04-14 00:52:05,213 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 01:02:32,002 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 01:02:32,057 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-14 01:02:32,057 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-14 01:02:32,059 - INFO -  * Restarting with stat
+2025-04-14 01:02:37,941 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 01:02:37,980 - WARNING -  * Debugger is active!
+2025-04-14 01:02:37,990 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 01:04:51,342 - INFO - 127.0.0.1 - - [14/Apr/2025 01:04:51] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 01:04:51,392 - INFO - 127.0.0.1 - - [14/Apr/2025 01:04:51] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-14 01:06:16,611 - INFO -  * Detected change in 'C:\\ShrewCrew\\project structure\\request_flow\\routes\\test_routes.py', reloading
+2025-04-14 01:06:16,847 - INFO -  * Restarting with stat
+2025-04-14 01:06:23,074 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 01:06:23,125 - WARNING -  * Debugger is active!
+2025-04-14 01:06:23,135 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 01:06:39,126 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 01:06:39,188 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-14 01:06:39,188 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-14 01:06:39,190 - INFO -  * Restarting with stat
+2025-04-14 01:06:45,064 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 01:06:45,101 - WARNING -  * Debugger is active!
+2025-04-14 01:06:45,108 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 01:06:46,471 - INFO - 127.0.0.1 - - [14/Apr/2025 01:06:46] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 01:22:36,677 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 01:22:36,749 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-14 01:22:36,750 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-14 01:22:36,752 - INFO -  * Restarting with stat
+2025-04-14 01:22:42,840 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 01:22:42,879 - WARNING -  * Debugger is active!
+2025-04-14 01:22:42,889 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 01:22:43,399 - INFO - 127.0.0.1 - - [14/Apr/2025 01:22:43] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 01:35:39,199 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 01:35:39,254 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-14 01:35:39,254 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-14 01:35:39,256 - INFO -  * Restarting with stat
+2025-04-14 01:35:45,244 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 01:35:45,290 - WARNING -  * Debugger is active!
+2025-04-14 01:35:45,298 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 01:36:10,074 - INFO - 127.0.0.1 - - [14/Apr/2025 01:36:10] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 01:36:11,168 - INFO - 127.0.0.1 - - [14/Apr/2025 01:36:11] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 08:32:32,936 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 08:32:33,036 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-14 08:32:33,036 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-14 08:32:33,039 - INFO -  * Restarting with stat
+2025-04-14 08:32:38,858 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 08:32:38,897 - WARNING -  * Debugger is active!
+2025-04-14 08:32:38,911 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 08:32:39,401 - INFO - 127.0.0.1 - - [14/Apr/2025 08:32:39] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 08:32:39,496 - INFO - 127.0.0.1 - - [14/Apr/2025 08:32:39] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 16:06:46,431 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 16:06:46,536 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-14 16:06:46,536 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-14 16:06:46,539 - INFO -  * Restarting with stat
+2025-04-14 16:06:53,347 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 16:06:53,390 - WARNING -  * Debugger is active!
+2025-04-14 16:06:53,402 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 16:07:14,081 - INFO - 127.0.0.1 - - [14/Apr/2025 16:07:14] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 16:07:14,147 - INFO - 127.0.0.1 - - [14/Apr/2025 16:07:14] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-14 22:31:36,099 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 22:31:36,196 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-14 22:31:36,196 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-14 22:31:36,200 - INFO -  * Restarting with stat
+2025-04-14 22:31:42,425 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 22:31:42,460 - WARNING -  * Debugger is active!
+2025-04-14 22:31:42,473 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 22:31:43,292 - INFO - 127.0.0.1 - - [14/Apr/2025 22:31:43] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 22:31:43,472 - INFO - 127.0.0.1 - - [14/Apr/2025 22:31:43] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 22:31:43,541 - INFO - 127.0.0.1 - - [14/Apr/2025 22:31:43] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-14 22:35:00,053 - INFO -  * Detected change in 'C:\\ShrewCrew\\project structure\\config.py', reloading
+2025-04-14 22:35:00,317 - INFO -  * Restarting with stat
+2025-04-14 22:35:06,766 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-14 22:35:06,810 - WARNING -  * Debugger is active!
+2025-04-14 22:35:06,822 - INFO -  * Debugger PIN: 760-680-241
+2025-04-14 22:35:39,231 - INFO - 127.0.0.1 - - [14/Apr/2025 22:35:39] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 22:35:41,130 - INFO - 127.0.0.1 - - [14/Apr/2025 22:35:41] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 22:36:39,569 - INFO - 127.0.0.1 - - [14/Apr/2025 22:36:39] "[33mGET / HTTP/1.1[0m" 404 -
+2025-04-14 22:36:52,650 - INFO - 127.0.0.1 - - [14/Apr/2025 22:36:52] "[33mGET /test HTTP/1.1[0m" 404 -
+2025-04-14 22:37:01,930 - INFO - 127.0.0.1 - - [14/Apr/2025 22:37:01] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 22:37:03,263 - INFO - 127.0.0.1 - - [14/Apr/2025 22:37:03] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-14 22:42:37,530 - INFO - 127.0.0.1 - - [14/Apr/2025 22:42:37] "[35m[1mGET /test-firestore HTTP/1.1[0m" 500 -
+2025-04-15 16:16:21,737 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-15 16:16:21,824 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-15 16:16:21,824 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-15 16:16:21,827 - INFO -  * Restarting with stat
+2025-04-15 16:16:35,765 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-15 16:16:35,816 - WARNING -  * Debugger is active!
+2025-04-15 16:16:35,829 - INFO -  * Debugger PIN: 760-680-241
+2025-04-15 16:16:53,633 - INFO - 127.0.0.1 - - [15/Apr/2025 16:16:53] "[33mGET / HTTP/1.1[0m" 404 -
+2025-04-15 16:16:53,834 - INFO - 127.0.0.1 - - [15/Apr/2025 16:16:53] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-15 16:17:04,183 - INFO - 127.0.0.1 - - [15/Apr/2025 16:17:04] "[33mGET / HTTP/1.1[0m" 404 -
+2025-04-15 16:17:04,266 - INFO - 127.0.0.1 - - [15/Apr/2025 16:17:04] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-15 16:17:35,637 - INFO - 127.0.0.1 - - [15/Apr/2025 16:17:35] "GET /test-firestore HTTP/1.1" 200 -
+2025-04-15 16:17:53,894 - INFO - 127.0.0.1 - - [15/Apr/2025 16:17:53] "GET /test-firestore HTTP/1.1" 200 -
+2025-04-15 16:17:53,979 - INFO - 127.0.0.1 - - [15/Apr/2025 16:17:53] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-15 16:57:41,851 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-15 16:57:41,943 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-15 16:57:41,943 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-15 16:57:41,947 - INFO -  * Restarting with stat
+2025-04-15 16:57:56,548 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-15 16:57:56,599 - WARNING -  * Debugger is active!
+2025-04-15 16:57:56,611 - INFO -  * Debugger PIN: 760-680-241
+2025-04-15 16:58:11,401 - INFO - 127.0.0.1 - - [15/Apr/2025 16:58:11] "GET /test-firestore HTTP/1.1" 200 -
+2025-04-15 16:58:11,468 - INFO - 127.0.0.1 - - [15/Apr/2025 16:58:11] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -

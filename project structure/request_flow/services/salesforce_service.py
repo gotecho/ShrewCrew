@@ -11,7 +11,9 @@ def authenticate_salesforce():
         sf = Salesforce(
             username=os.getenv("SALESFORCE_USERNAME"),
             password=os.getenv("SALESFORCE_PASSWORD"),
-            security_token=os.getenv("SALESFORCE_SECURITY_TOKEN")
+            #security_token=os.getenv("SALESFORCE_SECURITY_TOKEN")
+            #security_token=os.getenv("SALESFORCE_SECRET_KEY")
+            security_token=os.getenv("SALESFORCE_AUTH_URL")
         )
         logging.info("SalesForce authentication successful.")
         return sf

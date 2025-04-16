@@ -43,6 +43,12 @@ def save_request(case_id, issue_description):
         logging.info(f"New request saved: {request_data}")
     except Exception as e:
         logging.error(f"Error saving request for case_id {case_id}: {e}")
+        
+
+def get_all_cases():
+    cases_ref = database.collection("service_requests")
+    docs = cases_ref.stream()
+    return [{**doc.to_dict(), "id": doc.id} for doc in docs]
 
 
 # Updates the status of an existing request in Firestore.
