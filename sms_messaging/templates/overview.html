@@ -1,71 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>311 Case Overview</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        h1 {
-            color: #333;
-        }
-        .summary {
-            margin-bottom: 20px;
-        }
-    </style>
+  <title>311 Texting Channel</title>
+  <!-- Firebase and Chart.js -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>311 Case Overview</h1>
+  <h2>Request Types Visualization</h2>
+  <canvas id="categoryChart" width="800" height="400"></canvas>
 
-    <div class="summary">
-        <p>Total Cases: {{ total_cases }}</p>
-        <h2>Frequency of Each Category:</h2>
-        <ul>
-            {% for category, count in case_summary.items() %}
-                <li>{{ category }}: {{ count }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <h2>Details:</h2>
-    {% for category, cases in categorized_cases.items() %}
-        <h3>{{ category }}</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Case ID</th>
-                    <th>Status</th>
-                    <th>Description</th>
-                    <th>User</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for case in cases %}
-                <tr>
-                    <td>{{ case.case_id }}</td>
-                    <td>{{ case.status }}</td>
-                    <td>{{ case.description }}</td>
-                    <td>{{ case.user }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
+  <!-- Your custom script -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
