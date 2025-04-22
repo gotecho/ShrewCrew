@@ -28,7 +28,7 @@ We, however, still must develop the tools necessary for Dialogflow CX to both po
 
 Testing
 =======
-For CSC 191...
+To test the endpoints, go to tool_webhook and then webhook_tools. When there, go in the terminal in VSCode and type "pytest filename.py" without the quotation marks. Replace "filename.py" with the actual name of the file. 
 
 Deployment
 =======
