@@ -331,7 +331,7 @@ def deadAnimal():
 
         if case_response.status_code in (200, 201, 204):
             case_id = case_response.json().get("id")
-            print(f"Case Id: {case_id}")
+            print(f"caseId: {case_id}")
             return jsonify({"success": True, "caseId": case_id}), 200
         else:
             print("Exception occurred:")
