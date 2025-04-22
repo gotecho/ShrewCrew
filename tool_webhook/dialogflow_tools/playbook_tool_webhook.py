@@ -5,7 +5,7 @@ import sys
 import os
 from dotenv import load_dotenv
 import traceback
-from dialogflow_tools import scraper
+from dialogflow_tools.scraper import scrape_city_data
 import urllib.parse as urlp
 
 
