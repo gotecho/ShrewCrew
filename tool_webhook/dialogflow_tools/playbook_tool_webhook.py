@@ -22,28 +22,6 @@ grant_type = "password"
 url = os.getenv("SALESFORCE_URL")
 
 
-def get_service_type_id(service_name, token):
-    """Fetch the Service_Type__c ID from Salesforce based on a partial name match."""
-    query = urlp.quote_plus(
-        f"SELECT Id FROM Service_Type__c WHERE Name LIKE '%{service_name}%' LIMIT 1"
-    )
-
-    response = requests.get(
-        url=f"{url}/query/?q={query}",
-        headers={"Authorization": f"Bearer {token}"}
-    )
-
-    if response.status_code == 200:
-        records = response.json().get("records", [])
-        if records:
-            return records[0]["Id"]
-        else:
-            print("No matching service type found.")
-            return None
-    else:
-        print("Salesforce query failed:", response.status_code, response.text)
-        return None
-
 
 
 
@@ -342,16 +320,7 @@ def deadAnimal():
 
         print("Case data to Salesforce:", case_data)
 
-        service_type_id = get_service_type_id("Dead", token)
-        print(f"Fetched Service Type ID: {service_type_id}")  # Log ID value
-        if service_type_id:
-             case_data.update({
-                "Service_Type__c": service_type_id  
-            })
-        else:
-            print(traceback.format_exc())
-            return jsonify({"Success": False, "Error": "Could not fetch Service Type ID"}), 400
-           
+       
 
 
         

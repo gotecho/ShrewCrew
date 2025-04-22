@@ -120,14 +120,14 @@ def test_dead_animal_outside_area(mock_geocode, mock_post, mock_get_token, clien
     }
      
      mock_post.return_value.status_code = 401
-     mock_post.return_value.json.return_value = {"Success": False, "Error": "Address is outside the service area"}
+     mock_post.return_value.json.return_value = {"success": False, "error": "Address is outside the service area"}
 
      response = client.post('/dead_animal', json=animal_data)
      assert response.status_code == 401
      json_data = response.get_json()
-     assert json_data['Success'] == False
-     assert 'Error' in json_data
-     assert json_data['Error'] == 'Address is outside the service area'
+     assert json_data['success'] == False
+     assert 'error' in json_data
+     assert json_data['error'] == 'Address is outside the service area'
    
      
 
