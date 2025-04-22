@@ -41,6 +41,7 @@ def process_request(sender_number, incoming_msg):
     if incoming_msg == "new session":
         new_session_id = generate_session_id()
         set_user_session(sender_number, new_session_id)
+        incoming_msg = "hello"
         return f"A new session has been started: {new_session_id[:8]}..."
 
     session_id = get_user_session(sender_number)
