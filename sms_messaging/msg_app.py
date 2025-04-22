@@ -25,5 +25,9 @@ def login():
         else:
             sms = fetch_sms()
             return render_template("index.html", sms=sms)
+        
+@app.route("/form_stats")
+def stats():
+    return render_template("overview.html")
 
     
