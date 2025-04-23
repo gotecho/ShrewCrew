@@ -1,6 +1,9 @@
 from config import database
+from datetime import timezone
 import datetime
 import logging
+import uuid
+import hashlib
 
 # Configure logging
 logging.basicConfig(
@@ -81,3 +84,40 @@ def log_message(user, message, direction="inbound"):
         })
     except Exception as e:
         logging.error(f"Error logging message for user {user}: {e}")
+
+
+def generate_session_id():
+    raw_uuid = str(uuid.uuid4())
+    return hashlib.md5(raw_uuid.encode()).hexdigest()
+
+
+def set_user_session(phone_number, session_id):
+    try:
+        database.collection("sessions").document(phone_number).set({
+            "session_id": session_id,
+            "timestamp": datetime.datetime.utcnow()
+        })
+        logging.info(f"Session ID set for {phone_number}: {session_id}")
+    except Exception as e:
+        logging.error(f"Error setting session for {phone_number}: {e}")
+
+
+def get_user_session(phone_number):
+    try:
+        doc = database.collection("sessions").document(phone_number).get()
+        if doc.exists:
+            data = doc.to_dict()
+            session_id = data.get("session_id")
+            timestamp = data.get("timestamp")
+
+            if timestamp:
+                time_diff = datetime.datetime.now(timezone.utc) - timestamp
+                if time_diff.total_seconds() > 1800:  # 30 minutes
+                    logging.info(f"Session expired for {phone_number}")
+                    return None
+
+            return session_id
+        return None
+    except Exception as e:
+        logging.error(f"Error retrieving session for {phone_number}: {e}")
+        return None

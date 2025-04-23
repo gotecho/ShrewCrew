@@ -242,3 +242,161 @@ google.api_core.exceptions.PermissionDenied: 403 IAM permission 'dialogflow.sess
 2025-04-15 16:57:56,611 - INFO -  * Debugger PIN: 760-680-241
 2025-04-15 16:58:11,401 - INFO - 127.0.0.1 - - [15/Apr/2025 16:58:11] "GET /test-firestore HTTP/1.1" 200 -
 2025-04-15 16:58:11,468 - INFO - 127.0.0.1 - - [15/Apr/2025 16:58:11] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-23 00:41:12,586 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-23 00:41:12,671 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-23 00:41:12,671 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-23 00:41:12,673 - INFO -  * Restarting with stat
+2025-04-23 00:41:26,872 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-23 00:41:26,909 - WARNING -  * Debugger is active!
+2025-04-23 00:41:26,920 - INFO -  * Debugger PIN: 344-797-653
+2025-04-23 00:41:45,156 - INFO - Entering dialogflow_cx function
+2025-04-23 00:41:45,726 - ERROR - Error in dialogflow_cx function
+Traceback (most recent call last):
+  File "C:\ShrewCrew\project structure\request_flow\services\dialogflow_service.py", line 34, in detect_intent_text
+    response = client.detect_intent(request=request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\ShrewCrew\project structure\env\Lib\site-packages\google\cloud\dialogflowcx_v3\services\sessions\client.py", line 1024, in detect_intent
+    response = rpc(
+               ^^^^
+  File "C:\ShrewCrew\project structure\env\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\ShrewCrew\project structure\env\Lib\site-packages\google\api_core\retry\retry_unary.py", line 293, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "C:\ShrewCrew\project structure\env\Lib\site-packages\google\api_core\retry\retry_unary.py", line 153, in retry_target
+    _retry_error_helper(
+  File "C:\ShrewCrew\project structure\env\Lib\site-packages\google\api_core\retry\retry_base.py", line 212, in _retry_error_helper
+    raise final_exc from source_exc
+  File "C:\ShrewCrew\project structure\env\Lib\site-packages\google\api_core\retry\retry_unary.py", line 144, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "C:\ShrewCrew\project structure\env\Lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\ShrewCrew\project structure\env\Lib\site-packages\google\api_core\grpc_helpers.py", line 78, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.PermissionDenied: 403 IAM permission 'dialogflow.sessions.detectIntent' on 'projects/None/locations/us-central1/agents/04ad4e50-2d51-45fb-a45a-389b46eb771b' denied.
+2025-04-23 00:41:45,755 - INFO - 127.0.0.1 - - [23/Apr/2025 00:41:45] "[35m[1mPOST /sms HTTP/1.1[0m" 500 -
+2025-04-23 00:49:28,494 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-23 00:49:28,553 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-23 00:49:28,554 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-23 00:49:28,556 - INFO -  * Restarting with stat
+2025-04-23 00:49:42,800 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-23 00:49:42,835 - WARNING -  * Debugger is active!
+2025-04-23 00:49:42,844 - INFO -  * Debugger PIN: 344-797-653
+2025-04-23 00:50:14,369 - INFO - Entering dialogflow_cx function
+2025-04-23 00:50:16,107 - INFO - 127.0.0.1 - - [23/Apr/2025 00:50:16] "POST /sms HTTP/1.1" 200 -
+2025-04-23 00:50:56,819 - INFO - Entering dialogflow_cx function
+2025-04-23 00:50:58,097 - INFO - 127.0.0.1 - - [23/Apr/2025 00:50:58] "POST /sms HTTP/1.1" 200 -
+2025-04-23 00:51:29,679 - INFO - Entering dialogflow_cx function
+2025-04-23 00:51:31,928 - INFO - 127.0.0.1 - - [23/Apr/2025 00:51:31] "POST /sms HTTP/1.1" 200 -
+2025-04-23 00:51:46,575 - INFO - Entering dialogflow_cx function
+2025-04-23 00:51:47,859 - INFO - 127.0.0.1 - - [23/Apr/2025 00:51:47] "POST /sms HTTP/1.1" 200 -
+2025-04-23 00:51:56,288 - INFO - Entering dialogflow_cx function
+2025-04-23 00:51:57,347 - INFO - 127.0.0.1 - - [23/Apr/2025 00:51:57] "POST /sms HTTP/1.1" 200 -
+2025-04-23 00:53:18,638 - INFO - 127.0.0.1 - - [23/Apr/2025 00:53:18] "GET /test-firestore HTTP/1.1" 200 -
+2025-04-23 02:17:10,851 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-23 02:17:10,928 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-23 02:17:10,928 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-23 02:17:10,931 - INFO -  * Restarting with stat
+2025-04-23 02:17:25,184 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-23 02:17:25,225 - WARNING -  * Debugger is active!
+2025-04-23 02:17:25,235 - INFO -  * Debugger PIN: 344-797-653
+2025-04-23 02:18:11,290 - INFO - Session ID set for +19164688237: f5d6e7f744462f843ee07e1ac4fd5602
+2025-04-23 02:18:11,290 - INFO - New session initialized for +19164688237: f5d6e7f744462f843ee07e1ac4fd5602
+2025-04-23 02:18:11,290 - INFO - Entering dialogflow_cx function
+2025-04-23 02:18:13,055 - INFO - 127.0.0.1 - - [23/Apr/2025 02:18:13] "POST /sms HTTP/1.1" 200 -
+2025-04-23 02:18:26,356 - INFO - Session ID set for +19164688237: 68c382da63939d7c8856751c4860938e
+2025-04-23 02:18:26,554 - INFO - 127.0.0.1 - - [23/Apr/2025 02:18:26] "POST /sms HTTP/1.1" 200 -
+2025-04-23 02:27:30,953 - INFO -  * Detected change in 'C:\\ShrewCrew\\project structure\\request_flow\\routes\\sms_routes.py', reloading
+2025-04-23 02:27:33,209 - INFO -  * Restarting with stat
+2025-04-23 02:27:49,358 - ERROR - SalesForce authentication failed: INVALID_LOGIN: Invalid username, password, security token; or user locked out.
+2025-04-23 02:27:49,410 - WARNING -  * Debugger is active!
+2025-04-23 02:27:49,422 - INFO -  * Debugger PIN: 344-797-653
+2025-04-23 04:23:21,582 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-23 04:23:21,583 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-23 04:23:21,587 - INFO -  * Restarting with stat
+2025-04-23 04:23:32,985 - WARNING -  * Debugger is active!
+2025-04-23 04:23:32,995 - INFO -  * Debugger PIN: 344-797-653
+2025-04-23 04:24:05,393 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-23 04:24:05,394 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-23 04:24:05,396 - INFO -  * Restarting with stat
+2025-04-23 04:24:16,258 - WARNING -  * Debugger is active!
+2025-04-23 04:24:16,269 - INFO -  * Debugger PIN: 344-797-653
+2025-04-23 04:25:24,848 - ERROR - Error retrieving session for +19164688237: can't subtract offset-naive and offset-aware datetimes
+2025-04-23 04:25:25,060 - INFO - Session ID set for +19164688237: ec2529fab1da19ea0fe713f4f06a2f93
+2025-04-23 04:25:25,060 - INFO - New session initialized for +19164688237: ec2529fab1da19ea0fe713f4f06a2f93
+2025-04-23 04:25:25,060 - INFO - SESSION USED: ec2529fab1da19ea0fe713f4f06a2f93
+2025-04-23 04:25:25,061 - INFO - Entering dialogflow_cx function
+2025-04-23 04:25:26,755 - INFO - 127.0.0.1 - - [23/Apr/2025 04:25:26] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:25:56,532 - ERROR - Error retrieving session for +19164688237: can't subtract offset-naive and offset-aware datetimes
+2025-04-23 04:25:56,639 - INFO - Session ID set for +19164688237: 66a8dbfb82a11cc4db2dd81570df73a8
+2025-04-23 04:25:56,639 - INFO - New session initialized for +19164688237: 66a8dbfb82a11cc4db2dd81570df73a8
+2025-04-23 04:25:56,640 - INFO - SESSION USED: 66a8dbfb82a11cc4db2dd81570df73a8
+2025-04-23 04:25:56,640 - INFO - Entering dialogflow_cx function
+2025-04-23 04:25:57,967 - INFO - 127.0.0.1 - - [23/Apr/2025 04:25:57] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:27:01,333 - ERROR - Error retrieving session for +19164688237: can't subtract offset-naive and offset-aware datetimes
+2025-04-23 04:27:01,541 - INFO - Session ID set for +19164688237: 08b8b926bb2bd4682040fc9c9083c4af
+2025-04-23 04:27:01,541 - INFO - New session initialized for +19164688237: 08b8b926bb2bd4682040fc9c9083c4af
+2025-04-23 04:27:01,541 - INFO - SESSION USED: 08b8b926bb2bd4682040fc9c9083c4af
+2025-04-23 04:27:01,541 - INFO - Entering dialogflow_cx function
+2025-04-23 04:27:02,818 - INFO - 127.0.0.1 - - [23/Apr/2025 04:27:02] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:27:25,113 - ERROR - Error retrieving session for +19164688237: can't subtract offset-naive and offset-aware datetimes
+2025-04-23 04:27:25,319 - INFO - Session ID set for +19164688237: 38f5c72fe385a2122950f0191926e749
+2025-04-23 04:27:25,320 - INFO - New session initialized for +19164688237: 38f5c72fe385a2122950f0191926e749
+2025-04-23 04:27:25,320 - INFO - SESSION USED: 38f5c72fe385a2122950f0191926e749
+2025-04-23 04:27:25,320 - INFO - Entering dialogflow_cx function
+2025-04-23 04:27:26,882 - INFO - 127.0.0.1 - - [23/Apr/2025 04:27:26] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:27:48,261 - ERROR - Error retrieving session for +19164688237: can't subtract offset-naive and offset-aware datetimes
+2025-04-23 04:27:48,377 - INFO - Session ID set for +19164688237: 1153e03d78f201ecb5438a712cfa059f
+2025-04-23 04:27:48,377 - INFO - New session initialized for +19164688237: 1153e03d78f201ecb5438a712cfa059f
+2025-04-23 04:27:48,377 - INFO - SESSION USED: 1153e03d78f201ecb5438a712cfa059f
+2025-04-23 04:27:48,377 - INFO - Entering dialogflow_cx function
+2025-04-23 04:27:49,628 - INFO - 127.0.0.1 - - [23/Apr/2025 04:27:49] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:27:55,954 - ERROR - Error retrieving session for +19164688237: can't subtract offset-naive and offset-aware datetimes
+2025-04-23 04:27:56,056 - INFO - Session ID set for +19164688237: 6840ee9f4e05d10c4b5dd2183df801dd
+2025-04-23 04:27:56,056 - INFO - New session initialized for +19164688237: 6840ee9f4e05d10c4b5dd2183df801dd
+2025-04-23 04:27:56,056 - INFO - SESSION USED: 6840ee9f4e05d10c4b5dd2183df801dd
+2025-04-23 04:27:56,056 - INFO - Entering dialogflow_cx function
+2025-04-23 04:27:57,365 - INFO - 127.0.0.1 - - [23/Apr/2025 04:27:57] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:29:14,989 - ERROR - Error retrieving session for +19164688237: can't subtract offset-naive and offset-aware datetimes
+2025-04-23 04:29:15,205 - INFO - Session ID set for +19164688237: fc10434b5eb4375f423d1368d285fdf8
+2025-04-23 04:29:15,205 - INFO - New session initialized for +19164688237: fc10434b5eb4375f423d1368d285fdf8
+2025-04-23 04:29:15,205 - INFO - SESSION USED: fc10434b5eb4375f423d1368d285fdf8
+2025-04-23 04:29:15,205 - INFO - Entering dialogflow_cx function
+2025-04-23 04:29:16,410 - INFO - 127.0.0.1 - - [23/Apr/2025 04:29:16] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:29:42,635 - ERROR - Error retrieving session for +19164688237: can't subtract offset-naive and offset-aware datetimes
+2025-04-23 04:29:42,792 - INFO - Session ID set for +19164688237: 5c0ea636630a2d0788b57d4619edb83d
+2025-04-23 04:29:42,793 - INFO - New session initialized for +19164688237: 5c0ea636630a2d0788b57d4619edb83d
+2025-04-23 04:29:42,793 - INFO - SESSION USED: 5c0ea636630a2d0788b57d4619edb83d
+2025-04-23 04:29:42,793 - INFO - Entering dialogflow_cx function
+2025-04-23 04:29:44,119 - INFO - 127.0.0.1 - - [23/Apr/2025 04:29:44] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:30:03,963 - ERROR - Error retrieving session for +19164688237: can't subtract offset-naive and offset-aware datetimes
+2025-04-23 04:30:04,065 - INFO - Session ID set for +19164688237: bd533a228a33094e4932b89d6b4e5bd1
+2025-04-23 04:30:04,065 - INFO - New session initialized for +19164688237: bd533a228a33094e4932b89d6b4e5bd1
+2025-04-23 04:30:04,065 - INFO - SESSION USED: bd533a228a33094e4932b89d6b4e5bd1
+2025-04-23 04:30:04,065 - INFO - Entering dialogflow_cx function
+2025-04-23 04:30:05,307 - INFO - 127.0.0.1 - - [23/Apr/2025 04:30:05] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:42:24,963 - INFO -  * Detected change in 'C:\\ShrewCrew\\project structure\\request_flow\\services\\firestore_service.py', reloading
+2025-04-23 04:42:27,206 - INFO -  * Restarting with stat
+2025-04-23 04:42:48,292 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-23 04:42:48,293 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-23 04:42:48,296 - INFO -  * Restarting with stat
+2025-04-23 04:42:59,316 - WARNING -  * Debugger is active!
+2025-04-23 04:42:59,325 - INFO -  * Debugger PIN: 344-797-653
+2025-04-23 04:43:58,788 - INFO - SESSION USED: bd533a228a33094e4932b89d6b4e5bd1
+2025-04-23 04:43:58,790 - INFO - Entering dialogflow_cx function
+2025-04-23 04:44:00,450 - INFO - 127.0.0.1 - - [23/Apr/2025 04:44:00] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:44:49,233 - INFO - Session ID set for +19164688237: d0e7164a6fee7e460a0f94c18d69b6d2
+2025-04-23 04:44:49,356 - INFO - 127.0.0.1 - - [23/Apr/2025 04:44:49] "POST /sms HTTP/1.1" 200 -
+2025-04-23 04:45:39,827 - INFO - 127.0.0.1 - - [23/Apr/2025 04:45:39] "GET /test-firestore HTTP/1.1" 200 -
+2025-04-23 04:46:12,405 - INFO - SESSION USED: d0e7164a6fee7e460a0f94c18d69b6d2
+2025-04-23 04:46:12,405 - INFO - Entering dialogflow_cx function
+2025-04-23 04:46:13,714 - INFO - 127.0.0.1 - - [23/Apr/2025 04:46:13] "POST /sms HTTP/1.1" 200 -
