@@ -10,7 +10,8 @@ database = firestore.Client(database="shrewcrew-database")
 class Config:
     DEBUG = os.getenv("DEBUG", "False").lower() == "true"
     SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
-    GOOGLE_LOCATION = os.getenv("GOOGLE_LOCATION", "us-central1")
+    #GOOGLE_LOCATION = os.getenv("GOOGLE_LOCATION", "us-central1")
+    GOOGLE_LOCATION = os.getenv("REGION")
 
 class SalesforceConfig:
     USERNAME = os.getenv("SALESFORCE_USERNAME")
@@ -24,7 +25,8 @@ class TwilioConfig:
     PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER") 
 
 class DialogflowConfig:
-    PROJECT_ID = os.getenv("PROJECT_ID")
-    LOCATION = os.getenv("GOOGLE_LOCATION")
+    PROJECT_ID = os.getenv("GOOGLE_PROJECT_ID")
+    #GOOGLE_LOCATION = os.getenv("GOOGLE_LOCATION", "us-central1")
+    GOOGLE_LOCATION = os.getenv("REGION")
     GOOGLE_AGENT_ID = os.getenv("GOOGLE_AGENT_ID")
-    API_ENDPOINT = f"{LOCATION}-dialogflow.googleapis.com"
+    API_ENDPOINT = f"{os.getenv("REGION")}-dialogflow.googleapis.com"

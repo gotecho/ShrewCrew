@@ -1,7 +1,13 @@
+import logging
 from flask import Blueprint, request, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
 from request_flow.services.dialogflow_service import detect_intent_text
-from request_flow.services.firestore_service import log_message
+from request_flow.services.firestore_service import (
+    log_message,
+    generate_session_id,
+    set_user_session,
+    get_user_session
+)
 
 sms_bp = Blueprint('sms_bp', __name__)
 
@@ -34,4 +40,19 @@ def sms_reply():
 
 # Handles incoming SMS and forwards info to DFCX for response
 def process_request(sender_number, incoming_msg):
-    return detect_intent_text(incoming_msg, sender_number)
+    #return detect_intent_text(incoming_msg, sender_number)
+    if incoming_msg.lower() == "new session":
+        new_session_id = generate_session_id()
+        set_user_session(sender_number, new_session_id)
+        incoming_msg = "Hello. "
+        return f"A new session has been started: {new_session_id[:8]}..."
+    
+    session_id = get_user_session(sender_number)
+    if not session_id:
+        session_id = generate_session_id()
+        set_user_session(sender_number, session_id)
+        logging.info(f"New session initialized for {sender_number}: {session_id}")
+
+    logging.info(f"SESSION USED: {session_id}")
+    
+    return detect_intent_text(incoming_msg, session_id)

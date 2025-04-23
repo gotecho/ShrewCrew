@@ -12,13 +12,14 @@ credentials, _ = default()
 client_options = {"api_endpoint": f"{Config.GOOGLE_LOCATION}-dialogflow.googleapis.com"}
 client = dialogflowcx_v3.SessionsClient(credentials=credentials, client_options=client_options)
 
-def detect_intent_text(text, session_id="123456"):
+#def detect_intent_text(text, session_id="123456"):
+def detect_intent_text(text, session_id):
     try:
         logging.info('Entering dialogflow_cx function')
 
         session_path = client.session_path(
             DialogflowConfig.PROJECT_ID,
-            Config.GOOGLE_LOCATION,
+            DialogflowConfig.GOOGLE_LOCATION,
             DialogflowConfig.GOOGLE_AGENT_ID,
             session_id
         )
