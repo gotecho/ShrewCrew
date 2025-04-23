@@ -38,7 +38,7 @@ def sms_reply():
 
 # Handles incoming SMS and forwards info to DFCX for response
 def process_request(sender_number, incoming_msg):
-    if incoming_msg == "new session":
+    if incoming_msg.lower() == "new session":
         new_session_id = generate_session_id()
         set_user_session(sender_number, new_session_id)
         incoming_msg = "hello"
