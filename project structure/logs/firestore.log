@@ -400,3 +400,21 @@ google.api_core.exceptions.PermissionDenied: 403 IAM permission 'dialogflow.sess
 2025-04-23 04:46:12,405 - INFO - SESSION USED: d0e7164a6fee7e460a0f94c18d69b6d2
 2025-04-23 04:46:12,405 - INFO - Entering dialogflow_cx function
 2025-04-23 04:46:13,714 - INFO - 127.0.0.1 - - [23/Apr/2025 04:46:13] "POST /sms HTTP/1.1" 200 -
+2025-04-23 08:57:06,472 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-23 08:57:06,472 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-23 08:57:06,475 - INFO -  * Restarting with stat
+2025-04-23 08:57:17,339 - WARNING -  * Debugger is active!
+2025-04-23 08:57:17,350 - INFO -  * Debugger PIN: 344-797-653
+2025-04-23 09:58:29,649 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-23 09:58:29,651 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-23 09:58:29,653 - INFO -  * Restarting with stat
+2025-04-23 09:58:41,409 - WARNING -  * Debugger is active!
+2025-04-23 09:58:41,422 - INFO -  * Debugger PIN: 344-797-653
+2025-04-23 09:59:13,784 - INFO - Session expired for +19164688237
+2025-04-23 09:59:13,984 - INFO - Session ID set for +19164688237: ace455383b4d841e336923202939b1ed
+2025-04-23 09:59:13,984 - INFO - New session initialized for +19164688237: ace455383b4d841e336923202939b1ed
+2025-04-23 09:59:13,984 - INFO - SESSION USED: ace455383b4d841e336923202939b1ed
+2025-04-23 09:59:13,984 - INFO - Entering dialogflow_cx function
+2025-04-23 09:59:15,453 - INFO - 127.0.0.1 - - [23/Apr/2025 09:59:15] "POST /sms HTTP/1.1" 200 -
