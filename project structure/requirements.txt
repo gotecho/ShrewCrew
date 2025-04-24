@@ -1,0 +1,7 @@
+Flask
+requests
+python-dotenv
+pytest
+google-cloud-firestore
+twilio
+gunicorn
