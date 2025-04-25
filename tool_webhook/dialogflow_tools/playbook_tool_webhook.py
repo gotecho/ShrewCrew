@@ -5,7 +5,7 @@ import sys
 import os
 from dotenv import load_dotenv
 import traceback
-from dialogflow_tools.scraper import scrape_city_data
+from dialogflow_tools import scraper
 import urllib.parse as urlp
 
 
@@ -362,7 +362,7 @@ def scrape_and_return_data():
                 "error": "Missing 'userQuery' in the request body"
             }), 400
         
-        data = scrape_city_data(user_query)
+        data = scraper.scrape_city_data(user_query)
 
         return jsonify(data), 200
 
