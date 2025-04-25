@@ -62,49 +62,51 @@ def push_to_salesforce_generic():
     try:
         token = getToken() 
         case_url = f"{url}/sobjects/Case"
-        # Extract request JSON
         data = request.get_json()
 
-        # Extract fields from request body
-        first_name = str(data.get("firstName", "")).strip()
-        last_name = str(data.get("lastName", "")).strip()
-        phone = str(data.get("phone", "0")).strip()
-        issue_type = str(data.get("issueType", "General Inquiry")).strip()
-        description = data.get("description", "")
-        address = data.get("address", "")
+        # Extract raw fields
+        first_name_raw = data.get("firstName")
+        last_name_raw = data.get("lastName")
+        phone_raw = data.get("phone")
+        issue_type_raw = data.get("issueType")
+        description_raw = data.get("description")
+        address_raw = data.get("address")
 
-        # Validate required fields
-        required_fields = [first_name, last_name, phone, issue_type, description, address]
-        if not all(required_fields):
-            return jsonify({
-                "success": False,
-                "error": "Missing required fields"
-            }), 400
+        # === Type Validation ===
+        if first_name_raw is not None and not isinstance(first_name_raw, str):
+            return jsonify({"success": False, "error": "Invalid input type for firstName"}), 400
 
-        # Validate input types
-        if not isinstance(first_name, str) or not isinstance(last_name, str):
-            return jsonify({
-                "success": False,
-                "error": "Invalid input type for name fields"
-            }), 400
+        if last_name_raw is not None and not isinstance(last_name_raw, str):
+            return jsonify({"success": False, "error": "Invalid input type for lastName"}), 400
 
-        if not isinstance(phone, str) or not phone.isdigit() or len(phone) != 10:
-            return jsonify({
-                "success": False,
-                "error": "Invalid phone number"
-            }), 400
+        if phone_raw is not None and not isinstance(phone_raw, str):
+            return jsonify({"success": False, "error": "Invalid input type for phone"}), 400
 
-        if not isinstance(description, str):
-            return jsonify({
-                "success": False,
-                "error": "Invalid input type for description"
-            }), 400
+        if not isinstance(description_raw, str):
+            return jsonify({"success": False, "error": "Invalid input type for description"}), 400
 
-        if not isinstance(address, str):
-            return jsonify({
-                "success": False,
-                "error": "Invalid input type for address"
-            }), 400
+        if not isinstance(address_raw, str):
+            return jsonify({"success": False, "error": "Invalid input type for address"}), 400
+
+        # === Check for Missing Required Fields ===
+        if any(field is None or not field.strip() for field in [issue_type_raw, description_raw, address_raw]):
+            return jsonify({"success": False, "error": "Missing required fields"}), 400
+
+        # === Safe Assignments After Validation ===
+        first_name = (first_name_raw or "").strip()
+        last_name = (last_name_raw or "").strip()
+        phone = (phone_raw or "").strip()
+        issue_type = (issue_type_raw or "General Inquiry").strip()
+        description = description_raw.strip()
+        address = address_raw.strip()
+
+        # === Anonymous Check ===
+        is_anonymous = not first_name and not last_name
+
+        # === Phone Validation ===
+        if not is_anonymous:
+            if not phone.isdigit() or len(phone) != 10:
+                return jsonify({"success": False, "error": "Invalid phone number"}), 400
 
         addr_resp = a.geocode(address, 90)["internal_geocoder"]
 
@@ -113,9 +115,6 @@ def push_to_salesforce_generic():
                 "success": False,
                 "error": "Address is outside the service area"
             }), 401
-
-        # Determine if the case is anonymous
-        is_anonymous = not first_name and not last_name
 
         # Construct Salesforce request payload
         case_payload = {
