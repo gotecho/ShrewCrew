@@ -362,7 +362,7 @@ def scrape_and_return_data():
                 "error": "Missing 'userQuery' in the request body"
             }), 400
         
-        data = scraper.scrape_city_data(user_query)
+        data = scrape_city_data(user_query)
 
         return jsonify(data), 200
 
