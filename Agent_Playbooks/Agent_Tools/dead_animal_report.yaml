@@ -4,7 +4,7 @@ info:
   description: Fills out required information for a dead animal case. 
   version: 1.0.0
 servers: 
-  - url:  https://54c3-76-14-184-190.ngrok-free.app
+  - url:  https://playbook-tool-webhook-215704334341.us-central1.run.app
 paths: 
   /dead_animal:
     post: 
@@ -25,7 +25,8 @@ paths:
                   description: Location of dead animal. Must be either "Right of Way" or "Private Property".
                 location:
                   type: string
-                  example: "123 Avenue Street"
+                  description: Address for the issue. Users can enter either a full street address (e.g., "123 J Street") or an intersection (e.g., "5th St & Main St").
+                  example: "5th St & Main St"
                 animalType:
                   type: string
                   enum: 
@@ -53,7 +54,7 @@ paths:
                   example: "235-895-9844"
       responses:
         '200':
-          description: Successfully made new dead animal case.
+          description: Successfully made new dead animal case. 
           content: 
             application/json:
               schema:
@@ -62,7 +63,7 @@ paths:
                   success:
                     type: boolean
                   caseId:
-                    type: string 
+                    type: string
         '401':
           description: Dead animal case unsuccessful, address is outside of Sacramento area.
           content: 
@@ -85,3 +86,8 @@ paths:
                     type: boolean
                   error:
                     type: string
+
+       
+
+  
+     
