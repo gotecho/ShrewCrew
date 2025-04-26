@@ -7,9 +7,12 @@ from dotenv import load_dotenv
 import traceback
 from dialogflow_tools import scraper
 import urllib.parse as urlp
-
+from google.cloud import firestore
+import datetime
 
 app = Flask(__name__)
+
+db = firestore.Client()
 
 load_dotenv()
 
@@ -22,7 +25,18 @@ grant_type = "password"
 url = os.getenv("SALESFORCE_URL")
 
 
-
+def log_ticket_to_firestore(phone, case_id, issue_type, status="Open"):
+    try:
+        db.collection("tickets").add({
+            "phone": phone,
+            "issue_type": issue_type,
+            "case_id": case_id,
+            "status": status,
+            "created_at": datetime.datetime.utcnow()
+        })
+        print(f" Logged to Firestore: {phone}")
+    except Exception as e:
+        print(f" Firestore logging failed: {e}")
 
 
 def getToken():
@@ -49,7 +63,6 @@ def getToken():
         return access_token
     else:
         raise Exception(f"Failed to get access token from SalesForce: {response_data}")
-
 
 @app.route("/generic-case-post", methods=["POST"])
 def push_to_salesforce_generic():
@@ -156,6 +169,9 @@ def push_to_salesforce_generic():
         # Check response status
         if response.status_code in (200, 201, 204):
             case_id = response.json().get("id")
+
+            log_ticket_to_firestore(phone, case_id, issue_type)
+
             return jsonify({
                 "success": True,
                 "salesforce_response": case_id
@@ -232,7 +248,9 @@ def abandonedVehicle():
         print(f"case response: {case_response}")
 
         if case_response.status_code in (200, 201, 204):
+            issue_type = "Abandoned Vehicle"
             print(f"Case Id: {case_id}")
+            log_ticket_to_firestore(phoneNumber, case_id, issue_type)
             return jsonify({"success": True, "caseId": case_id}), 200
         else:
             return jsonify({"success": False, "error": f"Salesforce returned with {case_response.status_code}"}), case_response.status_code
@@ -330,7 +348,9 @@ def deadAnimal():
 
         if case_response.status_code in (200, 201, 204):
             case_id = case_response.json().get("id")
+            issue_type = "Dead Animal"
             print(f"caseId: {case_id}")
+            log_ticket_to_firestore(phoneNumber, case_id, issue_type)
             return jsonify({"success": True, "caseId": case_id}), 200
         else:
             print("Exception occurred:")

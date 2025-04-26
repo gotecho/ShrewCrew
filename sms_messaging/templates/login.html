@@ -1,22 +1,22 @@
-<!DOCTYPE html>
-<html lang = "en">
-<head> 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+html lang="en">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>311 Login</title>
+    <title>ShrewTech Admin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body id="loginPage">
     <div class="form">
         <h1>ShrewTech Admin Login</h1>
-        <form action=/form_login method="post">
-            <input type="text" name="username" placeholder="Username" >
-            <input type="password" name="password" placeholder="Password">
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
             <div>
-                <button type="submit" value="Login">Login</button>
-            </div> 
+                <button type="submit">Login</button>
+            </div>
         </form>
+        {% if info %}
+        <div class="errorMessage">{{ info }}</div>
+        {% endif %}
     </div>
 </body>
-<div class="errorMessage">{{info}}</div>
 </html>

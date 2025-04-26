@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Service Tickets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='SacStateImage.jpg') }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+    
+        #websiteHeader, table, section {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header id="websiteHeader">
+        <h1>311 Service Request Tickets</h1>
+        <form action="{{ url_for('welcome') }}">
+            <button type="submit">⬅️ Back to Welcome</button>
+        </form>
+    </header>
+
+    <!-- Chart Section -->
+    <section style="width: 70%; margin: auto; text-align: center;">
+        <h2>Ticket Issues by Category</h2>
+        <canvas id="issueChart" width="400" height="200"></canvas>
+    </section>
+
+    <!-- Table Section -->
+    <table id="ticketTable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Case ID</th>
+                <th>Issue Type</th>
+                <th>Status</th>
+                <th>Phone</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ticket in tickets %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ ticket['case_id'] }}</td>
+                <td>{{ ticket['issue_type'] }}</td>
+                <td>{{ ticket['status'] }}</td>
+                <td>{{ ticket['phone'] }}</td>
+                <td>{{ ticket['created_at'] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Chart.js Script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const labels = JSON.parse('{{ js_labels | safe }}');
+        const data = JSON.parse('{{ js_values | safe }}');
+    
+        const ctx = document.getElementById('issueChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Tickets',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

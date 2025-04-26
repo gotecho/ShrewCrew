@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to ShrewTech</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <head>
+        <meta charset="UTF-8">
+        <title>Welcome</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <style>
+            body {
+                margin: 0;
+                font-family: sans-serif;
+                background-image: url("{{ url_for('static', filename='SacStateImage.jpg') }}");
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-attachment: fixed;
+                color: black;
+            }
+    
+            #websiteHeader {
+                text-align: center;
+                background-color: rgba(144, 238, 144, 0.8); /* mint green with opacity */
+                padding: 2rem;
+                border-radius: 10px;
+                margin: 2rem auto;
+                width: 80%;
+            }
+    
+            .button-container {
+                display: flex;
+                justify-content: space-between;
+                margin: 3rem auto;
+                width: 80%;
+            }
+    
+            .portal-button {
+                font-size: 1.5rem;
+                padding: 1.5rem 3rem;
+                border-radius: 10px;
+                border: none;
+                background-color: #4CAF50;
+                color: white;
+                cursor: pointer;
+                transition: 0.3s ease;
+            }
+    
+            .portal-button:hover {
+                background-color: #3e8e41;
+            }
+        </style>
+    </head>
+</head>
+<body>
+    <header id="websiteHeader">
+        <h1>Welcome to the ShrewTech Admin Dashboard</h1>
+        <p>Select a portal to proceed:</p>
+    </header>
+
+    <div class="button-container">
+        <form action="/sms">
+            <button class="portal-button">📨 View SMS Messages</button>
+        </form>
+
+        <form action="/tickets">
+            <button class="portal-button">📋 View Tickets</button>
+        </form>
+    </div>
+</body>
+</html>

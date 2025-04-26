@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SMS Messages</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header id="websiteHeader">
+        <h1>Twilio SMS Logs</h1>
+        <form action="/welcome">
+            <button type="submit">⬅️ Back to Welcome</button>
+        </form>
+    </header>
+
+    <table id="smsTable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Direction</th>
+                <th>Date Created</th>
+                <th>Date Sent</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Status</th>
+                <th>Body</th>
+                <th>Price</th>
+                <th>Price Unit</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for x in sms %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ x.direction }}</td>
+                <td>{{ x.date_created }}</td>
+                <td>{{ x.date_sent }}</td>
+                <td>{{ x.from_ }}</td>
+                <td>{{ x.to }}</td>
+                <td>{{ x.status }}</td>
+                <td>{{ x.body }}</td>
+                <td>{{ x.price }}</td>
+                <td>{{ x.price_unit }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
