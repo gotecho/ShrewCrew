@@ -3,3 +3,4 @@ requests==2.31.0
 python-dotenv==1.0.1
 beautifulsoup4==4.12.3
 google-cloud-firestore==2.14.0
+gunicorn==21.2.0

@@ -12,7 +12,8 @@ import datetime
 
 app = Flask(__name__)
 
-db = firestore.Client()
+if __name__ == "__main__":
+    db = firestore.Client()
 
 load_dotenv()
 
