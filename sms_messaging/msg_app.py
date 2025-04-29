@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import firebase_admin
 import json
 from firebase_admin import credentials, firestore
-from twilio.rest import Client  # <- ✅ We need this
+from twilio.rest import Client  # <- We need this
 from collections import Counter
 
 import os
