@@ -14,7 +14,7 @@ app = Flask(__name__)
 # Firebase Initialization
 cred = credentials.Certificate("sms_messaging/twiliosacstate-firebase-adminsdk-fbsvc-b58a319116.json")
 firebase_admin.initialize_app(cred)
-db = firestore.client(database_id="shrewcrew-database")
+db = firestore.client()
 
 # Twilio Initialization
 account_sid = os.getenv("TWILIO_SID")
