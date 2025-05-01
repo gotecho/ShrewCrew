@@ -20,7 +20,8 @@ def detect_intent_text(text, session_id):
     try:
         logging.info('Entering dialogflow_cx function')
 
-        session_path = get_dialogflow_client().session_path(
+        client = get_dialogflow_client()
+        session_path = client.session_path(
             Config.GOOGLE_PROJECT_ID,
             Config.GOOGLE_LOCATION,
             Config.GOOGLE_AGENT_ID,
@@ -30,22 +31,16 @@ def detect_intent_text(text, session_id):
         text_input = dialogflowcx_v3.TextInput(text=text)
         query_input = dialogflowcx_v3.QueryInput(text=text_input, language_code="en")
 
-        request = dialogflowcx_v3.DetectIntentRequest(
-            session=session_path,
-            query_input=query_input
-        )
+        response = client.detect_intent(request={"session": session_path, "query_input": query_input})
 
-        response = get_dialogflow_client().detect_intent(request=request)
-
-        if response.query_result.response_messages:
-            texts = response.query_result.response_messages[0].text.text
-            if texts:
-                return texts[0]
+        for message in response.query_result.response_messages:
+            if message.text:
+                return message.text.text[0]
 
         return "No response from Dialogflow."
-
     except Exception as e:
-        logging.exception('Error in dialogflow_cx function')
-        raise
+        logging.error("Error in dialogflow_cx function", exc_info=True)
+        return f"Dialogflow error: {str(e)}"
+
 
 

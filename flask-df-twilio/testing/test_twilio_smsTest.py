@@ -61,5 +61,9 @@ def test_send_sms_fails_without_number(mocker):
     with pytest.raises(ValueError, match="TWILIO_PHONE_NUMBER is not set in environment variables."):
         send_sms("+1234567890", "Hello")
 
+def test_verify_twilio_request_missing_token(monkeypatch):
+    monkeypatch.delenv("TWILIO_AUTH_TOKEN", raising=False)
+    with pytest.raises(Exception, match="TWILIO_AUTH_TOKEN is not set in environment variables"):
+        verify_twilio_request()
 
 
