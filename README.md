@@ -1,5 +1,5 @@
 # ShrewCrew
- ![Shrew logo (1)](https://github.com/user-attachments/assets/a7e46d64-bf4a-4d0c-a2de-d96bc6980590)
+ ![New Shrew Logo](https://github.com/user-attachments/assets/388f4ea8-84b1-4097-a011-387a7e9315f8)
 
 ShrewTechs
 =======
