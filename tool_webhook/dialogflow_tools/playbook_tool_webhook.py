@@ -12,8 +12,7 @@ import datetime
 
 app = Flask(__name__)
 
-if __name__ == "__main__":
-    db = firestore.Client()
+db = firestore.Client()
 
 load_dotenv()
 
@@ -133,11 +132,11 @@ def push_to_salesforce_generic():
         # Construct Salesforce request payload
         case_payload = {
             "Subject": f"{issue_type} - {'Anonymous' if is_anonymous else f'''{first_name if first_name else ''} {last_name if last_name else ''}'''.strip()}",
-            "Status": "New",
+            "Status": "NEW",
             "Description": description,
             "Origin": "Web",
-            "Priority": "Medium",
-            "SuppliedPhone": None if is_anonymous else phone,
+            "Priority": "Low",
+            "SuppliedPhone": None if is_anonymous else phone
         }
 
         # Add geocoded address fields if available
@@ -156,6 +155,7 @@ def push_to_salesforce_generic():
 
         # Remove None values
         case_payload = {k: v for k, v in case_payload.items() if v is not None}
+        print(case_payload, flush=True)
 
         # Send POST request to Salesforce
         response = requests.post(

@@ -12,7 +12,7 @@ def client():
         yield client
 
 # Sucessful Test
-@patch('dialogflow_tools.playbook_tool_webhook.scrape_city_data')
+@patch('dialogflow_tools.scraper.scrape_city_data')
 def test_311_data_success(mock_scrape, client):
     mock_scrape.return_value = {
         "success": True,
@@ -41,7 +41,7 @@ def test_311_data_missing_user_query(client):
     assert json_data['error'] == "Missing 'userQuery' in the request body"
 
 # Scraper throws an exception
-@patch('dialogflow_tools.playbook_tool_webhook.scrape_city_data', side_effect=Exception("Scraping service is down"))
+@patch('dialogflow_tools.scraper.scrape_city_data', side_effect=Exception("Scraping service is down"))
 def test_311_data_scrape_failure(mock_scrape, client):
     response = client.post('/311-data', json={'userQuery': 'parks'})
     assert response.status_code == 500
@@ -65,7 +65,7 @@ def test_311_data_empty_string_user_query(client):
     assert json_data['error'] == "Missing 'userQuery' in the request body"
 
 #User submits a very long query
-@patch('dialogflow_tools.playbook_tool_webhook.scrape_city_data')
+@patch('dialogflow_tools.scraper.scrape_city_data')
 def test_311_data_long_query(mock_scrape, client):
     mock_scrape.return_value = {"success": True, "results": []}
     long_query = "graffiti" * 1000  # very long string
@@ -74,6 +74,3 @@ def test_311_data_long_query(mock_scrape, client):
     assert response.status_code == 200
     json_data = response.get_json()
     assert json_data['success'] is True
-
-
-
