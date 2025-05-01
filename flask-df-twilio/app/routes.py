@@ -8,7 +8,6 @@ main = Blueprint('main', __name__)
 
 @main.route('/sms', methods=['POST'])
 def sms_reply():
-    
     verify_twilio_request()
 
     try:
@@ -31,4 +30,6 @@ def sms_reply():
 
     except Exception as e:
         logging.exception('Error in sms_reply')
-        return "Internal Server Error", 500
+        twilio_response = MessagingResponse()
+        twilio_response.message("No response from Dialogflow.")
+        return str(twilio_response), 200
