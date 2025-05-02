@@ -17,16 +17,24 @@ app = Flask(__name__)
 
 load_dotenv()
 
-project_id = os.getenv("GOOGLE_PROJECT_ID")
-key_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+db = None
 
-# Use local credentials if provided, otherwise fall back to Google's default credentials
-if key_file:
-    key_path = Path(__file__).resolve().parents[2] / "sms_messaging" / key_file
-    credentials = service_account.Credentials.from_service_account_file(str(key_path))
-    db = firestore.Client(project=project_id, credentials=credentials, database="shrewcrew-database")
-else:
-    db = firestore.Client(project=project_id, database="shrewcrew-database")
+def init_firestore():
+    global db
+    if db is not None:
+        return db
+
+    load_dotenv()
+    project_id = os.getenv("GOOGLE_PROJECT_ID")
+    key_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+    if key_file:
+        key_path = Path(__file__).resolve().parents[2] / "sms_messaging" / key_file
+        credentials = service_account.Credentials.from_service_account_file(str(key_path))
+        db = firestore.Client(project=project_id, credentials=credentials, database="shrewcrew-database")
+    else:
+        db = firestore.Client(project=project_id, database="shrewcrew-database")
+    return db
 
 auth_url = os.getenv("SALESFORCE_AUTH_URL")
 client_id = os.getenv("SALESFORCE_CLIENT_ID")
@@ -39,7 +47,7 @@ url = os.getenv("SALESFORCE_URL")
 
 def log_ticket_to_firestore(phone, case_id, issue_type, status="Open"):
     try:
-        db.collection("tickets").add({
+        init_firestore().collection("tickets").add({
             "phone": phone,
             "issue_type": issue_type,
             "case_id": case_id,
@@ -106,12 +114,6 @@ def push_to_salesforce_generic():
 
         if phone_raw is not None and not isinstance(phone_raw, str):
             return jsonify({"success": False, "error": "Invalid input type for phone"}), 400
-
-        if not isinstance(description_raw, str):
-            return jsonify({"success": False, "error": "Invalid input type for description"}), 400
-
-        if not isinstance(address_raw, str):
-            return jsonify({"success": False, "error": "Invalid input type for address"}), 400
 
         # === Check for Missing Required Fields ===
         if any(field is None or not field.strip() for field in [issue_type_raw, description_raw, address_raw]):
