@@ -1,4 +1,4 @@
-from config import database
+from request_flow.config import database
 from datetime import timezone
 import datetime
 import logging
@@ -40,7 +40,7 @@ def save_request(case_id, issue_description):
         request_data = {
             "case_id": case_id,
             "issue_description": issue_description,
-            "timestamp": datetime.datetime.utcnow()
+            "timestamp": datetime.datetime.now(datetime.timezone.utc)
         }
         doc_ref.set(request_data)
         logging.info(f"New request saved: {request_data}")
@@ -80,7 +80,7 @@ def log_message(user, message, direction="inbound"):
         doc_ref.collection("messages").add({
             "message": message,
             "direction": direction,
-            "timestamp": datetime.datetime.utcnow()
+            "timestamp": datetime.datetime.now(datetime.timezone.utc)
         })
     except Exception as e:
         logging.error(f"Error logging message for user {user}: {e}")
@@ -95,7 +95,7 @@ def set_user_session(phone_number, session_id):
     try:
         database.collection("sessions").document(phone_number).set({
             "session_id": session_id,
-            "timestamp": datetime.datetime.utcnow()
+            "timestamp": datetime.datetime.now(datetime.timezone.utc)
         })
         logging.info(f"Session ID set for {phone_number}: {session_id}")
     except Exception as e:
@@ -111,7 +111,7 @@ def get_user_session(phone_number):
             timestamp = data.get("timestamp")
 
             if timestamp:
-                time_diff = datetime.datetime.now(timezone.utc) - timestamp
+                time_diff = datetime.datetime.now(datetime.timezone.utc) - timestamp
                 if time_diff.total_seconds() > 1800:  # 30 minutes
                     logging.info(f"Session expired for {phone_number}")
                     return None

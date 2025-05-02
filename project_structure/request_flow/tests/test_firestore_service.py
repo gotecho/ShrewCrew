@@ -1,9 +1,20 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'dialogflow_tools')))
 import pytest
 from unittest.mock import patch, MagicMock
-from datetime import datetime, timedelta, timezone
-
+from datetime import datetime, timedelta
 import request_flow.services.firestore_service as firestore_service
 
+
+@pytest.fixture(autouse=True)
+def patch_env():
+    with patch.dict(os.environ, {
+        "GOOGLE_PROJECT_ID": "test-project",
+        "GOOGLE_APPLICATION_CREDENTIALS": "dummy.json"
+    }):
+        yield
 
 @pytest.fixture
 def mock_firestore():
@@ -13,7 +24,7 @@ def mock_firestore():
 
 def test_get_latest_request_found(mock_firestore):
     mock_doc = MagicMock()
-    mock_doc.to_dict.return_value = {"case_id": "123", "timestamp": datetime.now(timezone.utc)}
+    mock_doc.to_dict.return_value = {"case_id": "123", "timestamp": datetime.datetime.now(datetime.timezone.utc)}
     mock_firestore.collection.return_value.where.return_value.order_by.return_value.limit.return_value.get.return_value = [mock_doc]
 
     result = firestore_service.get_latest_request("123")
@@ -94,7 +105,7 @@ def test_get_user_session_valid(mock_firestore):
     mock_doc.exists = True
     mock_doc.to_dict.return_value = {
         "session_id": "session-abc",
-        "timestamp": datetime.now(timezone.utc)
+        "timestamp": datetime.datetime.now(datetime.timezone.utc)
     }
     mock_firestore.collection.return_value.document.return_value.get.return_value = mock_doc
     result = firestore_service.get_user_session("5551234567")
@@ -106,7 +117,7 @@ def test_get_user_session_expired(mock_firestore):
     mock_doc.exists = True
     mock_doc.to_dict.return_value = {
         "session_id": "session-abc",
-        "timestamp": datetime.now(timezone.utc) - timedelta(minutes=31)
+        "timestamp": datetime.datetime.now(datetime.timezone.utc) - timedelta(minutes=31)
     }
     mock_firestore.collection.return_value.document.return_value.get.return_value = mock_doc
     result = firestore_service.get_user_session("5551234567")
