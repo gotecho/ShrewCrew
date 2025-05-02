@@ -1,21 +1,30 @@
 from flask import Flask, request, render_template, url_for, redirect
 from dotenv import load_dotenv
-import firebase_admin
 import json
-from firebase_admin import credentials, firestore
 from twilio.rest import Client  # <- We need this
 from collections import Counter
+from google.cloud import firestore
+from google.oauth2 import service_account
+from pathlib import Path
 
 import os
 
 load_dotenv()
+
+
+# Load service account
+project_id = os.getenv("GOOGLE_PROJECT_ID")
+key_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+# Use local credentials if provided, otherwise fall back to Google's default credentials
+if key_file:
+    key_path = Path(__file__).resolve().parent / key_file
+    credentials = service_account.Credentials.from_service_account_file(str(key_path))
+    db = firestore.Client(project=project_id, credentials=credentials, database="shrewcrew-database")
+else:
+    db = firestore.Client(project=project_id, database="shrewcrew-database")
+
 app = Flask(__name__)
-
-# Firebase Initialization
-cred = credentials.Certificate("sms_messaging/twiliosacstate-firebase-adminsdk-fbsvc-b58a319116.json")
-firebase_admin.initialize_app(cred)
-db = firestore.client()
-
 # Twilio Initialization
 account_sid = os.getenv("TWILIO_SID")
 auth_token = os.getenv("TWILIO_AUTH")

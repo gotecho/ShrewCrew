@@ -1,30 +1,35 @@
 import os
-import firebase_admin
 import datetime
-from firebase_admin import credentials, firestore
 from dotenv import load_dotenv
 from flask import Flask, request, Response
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.rest import Client
+from google.cloud import firestore
+from google.oauth2 import service_account
+from pathlib import Path
 
 load_dotenv()
 
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+project_id= os.getenv("GOOGLE_PROJECT_ID")
+key_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 
 # validate
 if not TWILIO_ACCOUNT_SID or not TWILIO_AUTH_TOKEN:
     raise ValueError("Twilio account credentials missing.")
 
+if not project_id or not key_file:
+    raise ValueError("Google account credentials missing.")
+
+# Use local credentials if provided, otherwise fall back to Google's default credentials
+if key_file:
+    key_path = Path(__file__).resolve().parent / key_file
+    credentials = service_account.Credentials.from_service_account_file(str(key_path))
+    db = firestore.Client(project=project_id, credentials=credentials, database="shrewcrew-database")
+else:
+    db = firestore.Client(project=project_id, database="shrewcrew-database")
 app = Flask(__name__)
-client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-# Initialize Firebase
-creds = credentials.Certificate("firebase_credentials.json")
-firebase_admin.initialize_app(creds)
-
-# Firestore database
-database = firestore.client()
 
 # Dictionary of responses (this is just for example so this part can be altered or deleted)
 animal_care_request_options = {

@@ -1,11 +1,29 @@
 import os
 from google.cloud import firestore
+from google.oauth2 import service_account
 from dotenv import load_dotenv
+from pathlib import Path
 
 load_dotenv()
 
 # Firestore Database Setup
-database = firestore.Client(database="shrewcrew-database")
+GOOGLE_PROJECT_ID = os.getenv("GOOGLE_PROJECT_ID")
+GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+if not GOOGLE_PROJECT_ID or not GOOGLE_APPLICATION_CREDENTIALS:
+    raise ValueError("Required .env values not set")
+
+# Resolve key path relative to config.py
+CREDENTIALS_PATH = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../sms_messaging", GOOGLE_APPLICATION_CREDENTIALS)
+)
+credentials = service_account.Credentials.from_service_account_file(CREDENTIALS_PATH)
+
+database = firestore.Client(
+    project=GOOGLE_PROJECT_ID,
+    credentials=credentials,
+    database="shrewcrew-database"
+)
 
 class Config:
     DEBUG = os.getenv("DEBUG", "False").lower() == "true"

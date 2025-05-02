@@ -8,13 +8,24 @@ import traceback
 from dialogflow_tools import scraper
 import urllib.parse as urlp
 from google.cloud import firestore
+from google.oauth2 import service_account
 import datetime
+
 
 app = Flask(__name__)
 
-db = firestore.Client()
-
 load_dotenv()
+
+project_id = os.getenv("GOOGLE_PROJECT_ID")
+key_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+# Use local credentials if provided, otherwise fall back to Google's default credentials
+if key_file:
+    key_path = Path(__file__).resolve().parent / key_file
+    credentials = service_account.Credentials.from_service_account_file(str(key_path))
+    db = firestore.Client(project=project_id, credentials=credentials, database="shrewcrew-database")
+else:
+    db = firestore.Client(project=project_id, database="shrewcrew-database")
 
 auth_url = os.getenv("SALESFORCE_AUTH_URL")
 client_id = os.getenv("SALESFORCE_CLIENT_ID")
