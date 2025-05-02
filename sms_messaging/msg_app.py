@@ -26,9 +26,12 @@ else:
 
 app = Flask(__name__)
 # Twilio Initialization
-account_sid = os.getenv("TWILIO_SID")
-auth_token = os.getenv("TWILIO_AUTH")
-twilio_client = Client(account_sid, auth_token)
+def get_twilio_client():
+    account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+    auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+    if not account_sid or not auth_token:
+        raise RuntimeError("Twilio credentials not set.")
+    return Client(account_sid, auth_token)
 
 # Hardcoded login database
 database = {
@@ -83,6 +86,7 @@ def fetch_sms_from_twilio():
     """Fetch real SMS logs from Twilio."""
     messages = []
     try:
+        twilio_client = get_twilio_client()
         sms_messages = twilio_client.messages.list(limit=50)  # You can adjust the limit
         for msg in sms_messages:
             messages.append({
