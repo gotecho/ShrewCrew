@@ -10,6 +10,7 @@ import urllib.parse as urlp
 from google.cloud import firestore
 from google.oauth2 import service_account
 import datetime
+from pathlib import Path
 
 
 app = Flask(__name__)
@@ -21,7 +22,7 @@ key_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 
 # Use local credentials if provided, otherwise fall back to Google's default credentials
 if key_file:
-    key_path = Path(__file__).resolve().parent / key_file
+    key_path = Path(__file__).resolve().parents[2] / "sms_messaging" / key_file
     credentials = service_account.Credentials.from_service_account_file(str(key_path))
     db = firestore.Client(project=project_id, credentials=credentials, database="shrewcrew-database")
 else:
