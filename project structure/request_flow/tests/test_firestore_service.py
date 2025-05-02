@@ -1,66 +1,122 @@
 import pytest
-import datetime
-from unittest.mock import AsyncMock, patch, MagicMock
-from request_flow.services.firestore_service import (
-    get_latest_request_by_case_id,
-    save_request_by_case_id,
-    update_request_status,
-    delete_request
-)
+from unittest.mock import patch, MagicMock
+from datetime import datetime, timedelta, timezone
 
-# Mocking Firestore -- replace actual Firestore db with mock version
+import request_flow.services.firestore_service as firestore_service
+
+
 @pytest.fixture
 def mock_firestore():
-    with patch("app.services.firestore_service.database") as mock_db:
+    with patch("request_flow.services.firestore_service.database") as mock_db:
         yield mock_db
 
 
-# Test: Get Latest Request
-# Checks that correct data is returned
-def test_get_latest_request_by_case_id(mock_firestore: MagicMock | AsyncMock):
-    mock_collection = mock_firestore.collection.return_value
-    mock_query = mock_collection.where.return_value.order_by.return_value.limit.return_value.get
-
-    # Simulated Firestore response
+def test_get_latest_request_found(mock_firestore):
     mock_doc = MagicMock()
-    mock_doc.to_dict.return_value = {
-        "case_id": "123456",
-        "issue_description": "Pothole on Main St",
-        "timestamp": datetime.datetime.utcnow()
+    mock_doc.to_dict.return_value = {"case_id": "123", "timestamp": datetime.now(timezone.utc)}
+    mock_firestore.collection.return_value.where.return_value.order_by.return_value.limit.return_value.get.return_value = [mock_doc]
+
+    result = firestore_service.get_latest_request("123")
+    assert result["case_id"] == "123"
+
+
+def test_get_latest_request_not_found(mock_firestore):
+    mock_firestore.collection.return_value.where.return_value.order_by.return_value.limit.return_value.get.return_value = []
+    result = firestore_service.get_latest_request("notfound")
+    assert result is None
+
+
+def test_get_latest_request_exception(mock_firestore):
+    mock_firestore.collection.return_value.where.return_value.order_by.return_value.limit.return_value.get.side_effect = Exception("Firestore failed")
+    result = firestore_service.get_latest_request("123")
+    assert result is None
+
+
+def test_save_request(mock_firestore):
+    mock_doc = MagicMock()
+    mock_firestore.collection.return_value.document.return_value = mock_doc
+    request_data = {
+        "Body": "pothole",
+        "From": "5551234567"
     }
-    mock_query.return_value = [mock_doc]
-
-    result = get_latest_request_by_case_id("123456")
-    assert result is not None
-    assert result["case_id"] == "123456"
-    assert result["issue_description"] == "Pothole on Main St"
+    session_id = "mock-session-id"
+    firestore_service.save_request(request_data, session_id)
+    mock_doc.set.assert_called_once()
 
 
-# Test: Save Request
-def test_save_request_by_case_id(mock_firestore: MagicMock | AsyncMock):
-    mock_collection = mock_firestore.collection.return_value
-    mock_document = mock_collection.document.return_value
+def test_get_all_cases(mock_firestore):
+    mock_doc = MagicMock()
+    mock_doc.id = "doc1"
+    mock_doc.to_dict.return_value = {"case_id": "123"}
+    mock_firestore.collection.return_value.stream.return_value = [mock_doc]
 
-    save_request_by_case_id("789101", "Streetlight outage")
-    
-    mock_document.set.assert_called_once()
-
-
-# Test: Update Request Status
-def test_update_request_status(mock_firestore: MagicMock | AsyncMock):
-    mock_collection = mock_firestore.collection.return_value
-    mock_document = mock_collection.document.return_value
-
-    update_request_status("123456", "Resolved")
-    
-    mock_document.update.assert_called_once_with({"status": "Resolved"})
+    cases = firestore_service.get_all_cases()
+    assert cases == [{"case_id": "123", "id": "doc1"}]
 
 
-# Test: Delete Request
-def test_delete_request(mock_firestore: MagicMock | AsyncMock):
-    mock_collection = mock_firestore.collection.return_value
-    mock_document = mock_collection.document.return_value
+def test_update_request_status(mock_firestore):
+    mock_doc = MagicMock()
+    mock_firestore.collection.return_value.document.return_value = mock_doc
+    firestore_service.update_request_status("123", "Resolved")
+    mock_doc.update.assert_called_with({"status": "Resolved"})
 
-    delete_request("123456")
-    
-    mock_document.delete.assert_called_once()
+
+def test_delete_request(mock_firestore):
+    mock_doc = MagicMock()
+    mock_firestore.collection.return_value.document.return_value = mock_doc
+    firestore_service.delete_request("123")
+    mock_doc.delete.assert_called_once()
+
+
+def test_log_message(mock_firestore):
+    mock_collection = MagicMock()
+    mock_firestore.collection.return_value.document.return_value.collection.return_value = mock_collection
+    firestore_service.log_message("5551234567", "Hello there")
+    mock_collection.add.assert_called_once()
+
+
+def test_generate_session_id():
+    result = firestore_service.generate_session_id()
+    assert isinstance(result, str)
+    assert len(result) == 32
+    int(result, 16)
+
+
+def test_set_user_session(mock_firestore):
+    mock_doc = MagicMock()
+    mock_firestore.collection.return_value.document.return_value = mock_doc
+    firestore_service.set_user_session("5551234567", "session-abc")
+    mock_doc.set.assert_called_once()
+
+
+def test_get_user_session_valid(mock_firestore):
+    mock_doc = MagicMock()
+    mock_doc.exists = True
+    mock_doc.to_dict.return_value = {
+        "session_id": "session-abc",
+        "timestamp": datetime.now(timezone.utc)
+    }
+    mock_firestore.collection.return_value.document.return_value.get.return_value = mock_doc
+    result = firestore_service.get_user_session("5551234567")
+    assert result == "session-abc"
+
+
+def test_get_user_session_expired(mock_firestore):
+    mock_doc = MagicMock()
+    mock_doc.exists = True
+    mock_doc.to_dict.return_value = {
+        "session_id": "session-abc",
+        "timestamp": datetime.now(timezone.utc) - timedelta(minutes=31)
+    }
+    mock_firestore.collection.return_value.document.return_value.get.return_value = mock_doc
+    result = firestore_service.get_user_session("5551234567")
+    assert result is None
+
+
+def test_get_user_session_none_dict(mock_firestore):
+    mock_doc = MagicMock()
+    mock_doc.exists = True
+    mock_doc.to_dict.return_value = None
+    mock_firestore.collection.return_value.document.return_value.get.return_value = mock_doc
+    result = firestore_service.get_user_session("5551234567")
+    assert result is None
