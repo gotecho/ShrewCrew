@@ -1,51 +1,67 @@
 import pytest
-from unittest.mock import patch, MagicMock
-from request_flow.services.salesforce_service import (
-    create_service_request_sf,
-    get_case_status_sf
-)
+from unittest.mock import patch
+from request_flow.services import salesforce_service
 
-# Mocks SalesForce API connection, and prevents actual API calls
 @pytest.fixture
-def mock_salesforce():
-    with patch("request_flow.services.salesforce_service.sf") as mock_sf:
-        yield mock_sf
-
-# Test: Create a New Salesforce Case
-# Ensures correct parameters are passed
-def test_create_service_request_sf(mock_salesforce):
-    mock_salesforce.Case.create.return_value = {"id": "123ABC"}
-
-    case_id = create_service_request_sf("Streetlight outage")
-
-    assert case_id == "123ABC"
-    mock_salesforce.Case.create.assert_called_once_with({
-        "Subject": "New 311 Service Request",
-        "Description": "Streetlight outage",
-        "Status": "New"
-    })
-
-# Test: Get Existing Salesforce Case Status
-# Checks to make sure that the correct case status is returned
-def test_get_case_status_sf(mock_salesforce):
-    mock_salesforce.Case.get.return_value = {
-        "Status": "Open",
-        "Description": "Streetlight outage reported."
+def mock_auth_response():
+    return {
+        "access_token": "mock_access_token",
+        "instance_url": "https://mock.salesforce.com"
     }
 
-    result = get_case_status_sf("123ABC")
+def test_create_service_request_success(mock_auth_response):
+    with patch("request_flow.services.salesforce_service.authenticate_salesforce", return_value=mock_auth_response), \
+         patch("request_flow.services.salesforce_service.requests.post") as mock_post:
+        
+        mock_post.return_value.status_code = 201
+        mock_post.return_value.json.return_value = {"id": "CASE123"}
 
-    assert result is not None
-    assert result["status"] == "Open"
-    assert result["description"] == "Streetlight outage reported."
-    mock_salesforce.Case.get.assert_called_once_with("123ABC")
+        result = salesforce_service.create_service_request("Test issue")
+        assert result["case_id"] == "CASE123"
+        assert result["message"] == "Case created successfully."
 
-# Test: Handle Case Retrieval Error
-# Mocks API failure
-# Ensures that the function returns "None" and doesn't crash
-def test_get_case_status_sf_error(mock_salesforce):
-    mock_salesforce.Case.get.side_effect = Exception("Salesforce API error")
+def test_create_service_request_failure(mock_auth_response):
+    with patch("request_flow.services.salesforce_service.authenticate_salesforce", return_value=mock_auth_response), \
+         patch("request_flow.services.salesforce_service.requests.post") as mock_post:
 
-    result = get_case_status_sf("999XYZ")
+        mock_post.return_value.status_code = 400
+        mock_post.return_value.text = "Bad Request"
 
-    assert result is None
+        result = salesforce_service.create_service_request("Invalid issue")
+        assert "error" in result
+        assert "Failed to create case" in result["error"]
+
+def test_get_case_status_success(mock_auth_response):
+    with patch("request_flow.services.salesforce_service.authenticate_salesforce", return_value=mock_auth_response), \
+         patch("request_flow.services.salesforce_service.requests.get") as mock_get:
+
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {
+            "Status": "New",
+            "Description": "This is a test case."
+        }
+
+        result = salesforce_service.get_case_status("CASE123")
+        assert result["status"] == "New"
+        assert result["description"] == "This is a test case."
+
+def test_get_case_status_not_found(mock_auth_response):
+    with patch("request_flow.services.salesforce_service.authenticate_salesforce", return_value=mock_auth_response), \
+         patch("request_flow.services.salesforce_service.requests.get") as mock_get:
+
+        mock_get.return_value.status_code = 404
+
+        result = salesforce_service.get_case_status("CASE404")
+        assert "error" in result
+        assert result["error"] == "Case not found."
+
+def test_get_case_status_server_error(mock_auth_response):
+    with patch("request_flow.services.salesforce_service.authenticate_salesforce", return_value=mock_auth_response), \
+         patch("request_flow.services.salesforce_service.requests.get") as mock_get:
+
+        mock_get.return_value.status_code = 500
+        mock_get.return_value.text = "Internal Server Error"
+
+        result = salesforce_service.get_case_status("CASE500")
+        assert "error" in result
+        assert "Error retrieving case" in result["error"]
