@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 load_dotenv()
 
-db = None  # <-- Delay initialization
+db = None
 
 def init_firestore():
     global db
@@ -114,12 +114,6 @@ def push_to_salesforce_generic():
 
         if phone_raw is not None and not isinstance(phone_raw, str):
             return jsonify({"success": False, "error": "Invalid input type for phone"}), 400
-
-        if not isinstance(description_raw, str):
-            return jsonify({"success": False, "error": "Invalid input type for description"}), 400
-
-        if not isinstance(address_raw, str):
-            return jsonify({"success": False, "error": "Invalid input type for address"}), 400
 
         # === Check for Missing Required Fields ===
         if any(field is None or not field.strip() for field in [issue_type_raw, description_raw, address_raw]):

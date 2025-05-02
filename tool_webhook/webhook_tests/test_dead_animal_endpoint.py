@@ -6,18 +6,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 from unittest.mock import patch
 from dialogflow_tools.playbook_tool_webhook import app
 
-@pytest.fixture
-def client(): 
-    with app.test_client() as client:
-        yield client
-
-# Mock the getToken function to return a dummy token
-@patch('dialogflow_tools.playbook_tool_webhook.getToken', return_value='dummy_token')
 # Mock the requests.post to avoid making actual HTTP requests
 @patch('dialogflow_tools.playbook_tool_webhook.requests.post')
 # Mock a.geocode 
 @patch("dialogflow_tools.playbook_tool_webhook.a.geocode")
-def test_dead_animal_success(mock_geocode, mock_post, mock_get_token, client):
+def test_dead_animal_success(mock_geocode, mock_post, client): 
     mock_geocode.return_value = {
         "internal_geocoder": {
             "candidates": [{
@@ -56,10 +49,9 @@ def test_dead_animal_success(mock_geocode, mock_post, mock_get_token, client):
     assert json_data['caseId'] == '123456'
 
 
-@patch('dialogflow_tools.playbook_tool_webhook.getToken', return_value='dummy_token')
 @patch('dialogflow_tools.playbook_tool_webhook.requests.post')
 @patch("dialogflow_tools.playbook_tool_webhook.a.geocode")
-def test_dead_animal_fail(mock_geocode, mock_post, mock_get_token, client):
+def test_dead_animal_fail(mock_geocode, mock_post, client):
     mock_geocode.return_value = {
         "internal_geocoder": {
             "candidates": [{
@@ -99,10 +91,9 @@ def test_dead_animal_fail(mock_geocode, mock_post, mock_get_token, client):
 
 
 
-@patch('dialogflow_tools.playbook_tool_webhook.getToken', return_value='dummy_token')
 @patch('dialogflow_tools.playbook_tool_webhook.requests.post')
 @patch("dialogflow_tools.playbook_tool_webhook.a.geocode")
-def test_dead_animal_outside_area(mock_geocode, mock_post, mock_get_token, client): 
+def test_dead_animal_outside_area(mock_geocode, mock_post, client): 
      mock_geocode.return_value = {
         "internal_geocoder": {}
     }
