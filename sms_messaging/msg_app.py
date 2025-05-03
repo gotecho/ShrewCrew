@@ -1,37 +1,36 @@
 from flask import Flask, request, render_template, url_for, redirect
 from dotenv import load_dotenv
 import json
-from twilio.rest import Client  # <- We need this
+import os
 from collections import Counter
+from pathlib import Path
+from twilio.rest import Client
 from google.cloud import firestore
 from google.oauth2 import service_account
-from pathlib import Path
-
-import os
 
 load_dotenv()
 
-
-# Load service account
-project_id = os.getenv("GOOGLE_PROJECT_ID")
-key_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-
-# Use local credentials if provided, otherwise fall back to Google's default credentials
-if key_file:
-    key_path = Path(__file__).resolve().parent / key_file
-    credentials = service_account.Credentials.from_service_account_file(str(key_path))
-    db = firestore.Client(project=project_id, credentials=credentials, database="shrewcrew-database")
-else:
-    db = firestore.Client(project=project_id, database="shrewcrew-database")
-
 app = Flask(__name__)
-# Twilio Initialization
+
+# Twilio client creation encapsulated
 def get_twilio_client():
     account_sid = os.getenv("TWILIO_SID")
     auth_token = os.getenv("TWILIO_AUTH")
     if not account_sid or not auth_token:
         raise RuntimeError("Twilio credentials not set.")
     return Client(account_sid, auth_token)
+
+# Firestore client creation encapsulated
+def get_firestore_client():
+    project_id = os.getenv("GOOGLE_PROJECT_ID")
+    key_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+    if key_file:
+        key_path = Path(__file__).resolve().parent / key_file
+        credentials = service_account.Credentials.from_service_account_file(str(key_path))
+        return firestore.Client(project=project_id, credentials=credentials, database="shrewcrew-database")
+    else:
+        return firestore.Client(project=project_id, database="shrewcrew-database")
 
 # Hardcoded login database
 database = {
@@ -71,7 +70,7 @@ def tickets():
     issue_values = list(issue_counts.values())
 
     # Manually format into JavaScript-friendly JSON strings
-    js_labels = json.dumps(issue_labels)   # IMPORTANT: json.dumps()
+    js_labels = json.dumps(issue_labels)
     js_values = json.dumps(issue_values)
 
     return render_template(
@@ -81,13 +80,13 @@ def tickets():
         js_values=js_values
     )
 
-# Helper functions
+# --- Helper functions ---
+
 def fetch_sms_from_twilio():
-    """Fetch real SMS logs from Twilio."""
     messages = []
-    twilio_client = get_twilio_client()
     try:
-        sms_messages = twilio_client.messages.list(limit=50)  # You can adjust the limit
+        twilio_client = get_twilio_client()
+        sms_messages = twilio_client.messages.list(limit=50)
         for msg in sms_messages:
             messages.append({
                 'direction': msg.direction,
@@ -105,15 +104,12 @@ def fetch_sms_from_twilio():
     return messages
 
 def fetch_tickets_from_firestore():
-    """Fetch tickets from Firebase Firestore."""
     tickets = []
     try:
+        db = get_firestore_client()
         docs = db.collection('tickets').stream()
-        docs = list(docs)  # Convert to list to check length
+        docs = list(docs)
         print(f"Fetched {len(docs)} documents from Firestore.")
-
-        if not docs:
-            print("No documents found in 'tickets' collection.")
 
         for doc in docs:
             data = doc.to_dict()
@@ -127,8 +123,8 @@ def fetch_tickets_from_firestore():
                 'created_at': data.get('created_at', 'Missing created_at')
             }
             print(f"Processed ticket data: {ticket}")
-
             tickets.append(ticket)
+
     except Exception as e:
         print("Error fetching Tickets:", e)
 
