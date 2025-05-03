@@ -1,6 +1,6 @@
 from flask import Blueprint
-from request_flow.routes.sms_routes import sms_bp
-from request_flow.routes.webhook_routes import webhook_bp
+from .routes.sms_routes import sms_bp
+from .routes.webhook_routes import webhook_bp
 
 routes_bp = Blueprint('routes_bp', __name__)
 

@@ -1,15 +1,16 @@
-import os
+from project_structure.config import get_twilio_config
+twilio_config = get_twilio_config()
+
 from twilio.rest import Client
 
-client = Client(os.getenv("TWILIO_ACCOUNT_SID"), os.getenv("TWILIO_AUTH_TOKEN"))
+client = Client(twilio_config['sid'], twilio_config['auth_token'])
 
-# Sends an SMS via Twilio.
 def send_sms(to, message):
     try:
         sms = client.messages.create(
             body=message,
-            from_=os.getenv("TWILIO_PHONE_NUMBER"),
-            to=to
+            to=to,
+            from_=twilio_config['phone']
         )
         return sms.sid
     except Exception as e:

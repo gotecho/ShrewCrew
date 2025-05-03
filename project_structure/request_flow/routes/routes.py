@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from config import database
+from ..config import database
 from google.cloud import firestore
 
 test_bp = Blueprint('test_bp', __name__)

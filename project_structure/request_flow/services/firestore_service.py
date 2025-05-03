@@ -1,9 +1,11 @@
-from config import database
-from datetime import timezone
 import datetime
 import logging
 import uuid
 import hashlib
+from datetime import timezone
+from google.cloud import firestore
+from google.oauth2 import service_account
+from project_structure.config import get_project_id, get_application_credentials
 
 # Configure logging
 logging.basicConfig(
@@ -12,11 +14,20 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
-# Fetch the latest service request using case_id instead of a phone_number.
+# Lazy Firestore client loader
+def get_firestore_client():
+    credentials = service_account.Credentials.from_service_account_file(
+        get_application_credentials()
+    )
+    return firestore.Client(project=get_project_id(), credentials=credentials)
+
+
+
 def get_latest_request(case_id):
+    db = get_firestore_client()
     try:
         logging.info(f"Fetching latest request for case_id: {case_id}")
-        requests_query = database.collection("service_requests") \
+        requests_query = db.collection("service_requests") \
             .where("case_id", "==", case_id) \
             .order_by("timestamp", direction="DESCENDING") \
             .limit(1).get()
@@ -32,11 +43,10 @@ def get_latest_request(case_id):
         logging.error(f"Error fetching request for case_id {case_id}: {e}")
         return None
 
-
-# Stores a new request in Firestore using case_id instead of a phone number.
 def save_request(case_id, issue_description):
+    db = get_firestore_client()
     try:
-        doc_ref = database.collection("service_requests").document(case_id)
+        doc_ref = db.collection("service_requests").document(case_id)
         request_data = {
             "case_id": case_id,
             "issue_description": issue_description,
@@ -46,37 +56,34 @@ def save_request(case_id, issue_description):
         logging.info(f"New request saved: {request_data}")
     except Exception as e:
         logging.error(f"Error saving request for case_id {case_id}: {e}")
-        
 
 def get_all_cases():
-    cases_ref = database.collection("service_requests")
+    db = get_firestore_client()
+    cases_ref = db.collection("service_requests")
     docs = cases_ref.stream()
     return [{**doc.to_dict(), "id": doc.id} for doc in docs]
 
-
-# Updates the status of an existing request in Firestore.
 def update_request_status(case_id, new_status):
+    db = get_firestore_client()
     try:
-        doc_ref = database.collection("service_requests").document(case_id)
+        doc_ref = db.collection("service_requests").document(case_id)
         doc_ref.update({"status": new_status})
         logging.info(f"Updated status for case_id {case_id} to {new_status}")
     except Exception as e:
         logging.error(f"Error updating status for case_id {case_id}: {e}")
 
-
-# Deletes a request from Firestore.
 def delete_request(case_id):
+    db = get_firestore_client()
     try:
-        database.collection("service_requests").document(case_id).delete()
+        db.collection("service_requests").document(case_id).delete()
         logging.info(f"Deleted request for case_id {case_id}")
     except Exception as e:
         logging.error(f"Error deleting request for case_id {case_id}: {e}")
 
-
-# Implement Firestore conversation logs
 def log_message(user, message, direction="inbound"):
+    db = get_firestore_client()
     try:
-        doc_ref = database.collection("conversations").document(user)
+        doc_ref = db.collection("conversations").document(user)
         doc_ref.collection("messages").add({
             "message": message,
             "direction": direction,
@@ -85,15 +92,14 @@ def log_message(user, message, direction="inbound"):
     except Exception as e:
         logging.error(f"Error logging message for user {user}: {e}")
 
-
 def generate_session_id():
     raw_uuid = str(uuid.uuid4())
     return hashlib.md5(raw_uuid.encode()).hexdigest()
 
-
 def set_user_session(phone_number, session_id):
+    db = get_firestore_client()
     try:
-        database.collection("sessions").document(phone_number).set({
+        db.collection("sessions").document(phone_number).set({
             "session_id": session_id,
             "timestamp": datetime.datetime.utcnow()
         })
@@ -101,10 +107,10 @@ def set_user_session(phone_number, session_id):
     except Exception as e:
         logging.error(f"Error setting session for {phone_number}: {e}")
 
-
 def get_user_session(phone_number):
+    db = get_firestore_client()
     try:
-        doc = database.collection("sessions").document(phone_number).get()
+        doc = db.collection("sessions").document(phone_number).get()
         if doc.exists:
             data = doc.to_dict()
             session_id = data.get("session_id")

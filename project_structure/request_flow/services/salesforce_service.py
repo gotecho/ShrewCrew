@@ -1,20 +1,21 @@
 import os
 import requests
 import logging
-from dotenv import load_dotenv
+from project_structure.config import get_salesforce_credentials
 
-load_dotenv()
+# Setup logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 def authenticate_salesforce():
-    #Authenticate with Salesforce via OAuth 2.0 password grant and return token + instance URL.
-    url = os.getenv("SALESFORCE_AUTH_URL")
+    sf_creds = get_salesforce_credentials()
+
+    url = f"{sf_creds['instance_url']}/services/oauth2/token"
     payload = {
         "grant_type": "password",
-        "client_id": os.getenv("SALESFORCE_CLIENT_ID"),
-        "client_secret": os.getenv("SALESFORCE_SECRET_KEY"),
-        "username": os.getenv("SALESFORCE_USERNAME"),
-        "password": os.getenv("SALESFORCE_PASSWORD")
+        "client_id": sf_creds["client_id"],
+        "client_secret": sf_creds["client_secret"],
+        "username": sf_creds["username"],
+        "password": sf_creds["password"] + sf_creds["security_token"]
     }
 
     response = requests.post(url, data=payload)
