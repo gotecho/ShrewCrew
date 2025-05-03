@@ -25,7 +25,7 @@ We have also developed various tools so that the agent using the playbook can th
 
 Testing
 =======
-To test the endpoints, go to tool_webhook and then webhook_tools. When there, go in the terminal in VSCode and type "pytest filename.py" without the quotation marks. Replace "filename.py" with the actual name of the file. 
+To test the endpoints, first: download requirements.txt (pip install -r requirements.txt), second: go to the base folder of the Github and run 'pytest'
 
 Deployment
 =======
