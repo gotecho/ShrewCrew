@@ -48,16 +48,20 @@
             </tr>
         </thead>
         <tbody>
-        {% for ticket in tickets %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ ticket['case_id'] }}</td>
-                <td>{{ ticket['issue_type'] }}</td>
-                <td>{{ ticket['status'] }}</td>
-                <td>{{ ticket['phone'] }}</td>
-                <td>{{ ticket['created_at'] }}</td>
-            </tr>
-        {% endfor %}
+        {% if tickets|length == 0 %}
+            <tr><td colspan="6">No ticket data available.</td></tr>
+        {% else %}
+            {% for ticket in tickets %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ ticket['case_id'] }}</td>
+                    <td>{{ ticket['issue_type'] }}</td>
+                    <td>{{ ticket['status'] }}</td>
+                    <td>{{ ticket['phone'] }}</td>
+                    <td>{{ ticket['created_at'] }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
         </tbody>
     </table>
 

@@ -29,20 +29,24 @@
             </tr>
         </thead>
         <tbody>
-        {% for x in sms %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ x.direction }}</td>
-                <td>{{ x.date_created }}</td>
-                <td>{{ x.date_sent }}</td>
-                <td>{{ x.from_ }}</td>
-                <td>{{ x.to }}</td>
-                <td>{{ x.status }}</td>
-                <td>{{ x.body }}</td>
-                <td>{{ x.price }}</td>
-                <td>{{ x.price_unit }}</td>
-            </tr>
-        {% endfor %}
+        {% if sms|length == 0 %}
+            <tr><td colspan="10">No messages available.</td></tr>
+        {% else %}
+            {% for x in sms %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ x.direction }}</td>
+                    <td>{{ x.date_created }}</td>
+                    <td>{{ x.date_sent }}</td>
+                    <td>{{ x.from_ }}</td>
+                    <td>{{ x.to }}</td>
+                    <td>{{ x.status }}</td>
+                    <td>{{ x.body }}</td>
+                    <td>{{ x.price }}</td>
+                    <td>{{ x.price_unit }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
         </tbody>
     </table>
 </body>
