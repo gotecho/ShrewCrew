@@ -188,13 +188,13 @@ pytest
 
 Product Example Images
 =======
-![CSC 191 Readme Image 1](https://github.com/user-attachments/assets/2d5061fb-4d96-4e36-bea6-85934e294cc2)
+![CSC 191 Readme Image 1](https://github.com/user-attachments/assets/2d5061fb-4d96-4e36-bea6-85934e294cc2 | width=75)
 *This first image shows starting a new session with the product with the keywords "New Session," then saying you want to file an abandoned vehicle case. The product will then begin to gather information.*
 
-![CSC 191 Readme Image 2](https://github.com/user-attachments/assets/2be1a460-ee24-4a81-9c86-19db62b54981)
+![CSC 191 Readme Image 2](https://github.com/user-attachments/assets/2be1a460-ee24-4a81-9c86-19db62b54981 | width=75)
 *This second image shows the AI Text Channel continuing to gather information from the user, and then sending one last larger message in order to confirm with the user that the info the AI has gathered is correct. This confirmation message should happen with any case a user files with the text channel.*
 
-![CSC 191 Readme Image 3](https://github.com/user-attachments/assets/8b637cb4-9154-4507-ab0d-20895916fb01)
+![CSC 191 Readme Image 3](https://github.com/user-attachments/assets/8b637cb4-9154-4507-ab0d-20895916fb01 | width=75)
 *This third image shows the Text Channel filing the case to Salesforce, and then telling the user their specific case number so that they may reference it again later. This should also happen whenever a user files a case with the text channel.*
 
 
