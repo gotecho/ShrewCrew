@@ -33,4 +33,40 @@ For CSC 191...
 
 Developer Instructions
 =======
-For CSC 191...
+Local Setup:
+Clone the repository:
+git clone https://github.com/[your-org-or-username]/ShrewCrew.git
+cd ShrewCrew
+
+Set up a virtual environment:
+python3 -m venv .venv
+source .venv/bin/activate
+
+Install dependencies:
+pip install -r requirements.txt
+
+Set up environment variables:
+Create a .env file in the root directory.
+Include all necessary credentials and configuration variables such as:
+SALESFORCE_AUTH_URL=
+SALESFORCE_CLIENT_ID=
+SALESFORCE_SECRET_KEY=
+SALESFORCE_USERNAME=
+SALESFORCE_PASSWORD=
+SALESFORCE_URL=
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+GOOGLE_APPLICATION_CREDENTIALS=path/to/your/service-account-key.json
+EXTERNAL_GIS_URL=
+
+Run Locally
+You can run the Flask app locally using:
+flask run
+
+or with gunicorn for a production-style server:
+gunicorn app:app
+Adjust the module name (app) if needed, depending on your entry point.
+
+Run Tests
+To run the test suite:
+pytest from the main folder.
