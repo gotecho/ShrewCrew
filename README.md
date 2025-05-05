@@ -4,7 +4,7 @@
 ShrewTechs
 =======
 - Team Leader: Anthony Vitro - avitro@csus.edu
-- Team Member: Ronald Pierre Lingat
+- Team Member: Ronald Pierre Lingat - ronaldpierrelingat@csus.edu
 - Team Member: Ava Brady - abrady@csus.edu
 - Team Member: Edmar Cimatu
 - Team Member: Drew Izzo - drewizzo@csus.edu
