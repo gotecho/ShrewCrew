@@ -10,7 +10,7 @@ ShrewTechs
 - Team Member: Drew Izzo - drewizzo@csus.edu
 - Team Member: Mia Brady - miabrady@csus.edu
 - Team Member: Spencer Headspeth - spencerheadspeth@csus.edu
-- Team Member: Rajesh Suresh
+- Team Member: Rajesh Suresh - rmsuresh@csus.edu
 
 Synopsis
 =======
