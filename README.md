@@ -8,7 +8,7 @@ ShrewTechs
 - Team Member: Ava Brady
 - Team Member: Edmar Cimatu
 - Team Member: Drew Izzo - drewizzo@csus.edu
-- Team Member: Mia Brady
+- Team Member: Mia Brady - miabrady@csus.edu
 - Team Member: Spencer Headspeth - spencerheadspeth@csus.edu
 - Team Member: Rajesh Suresh
 
